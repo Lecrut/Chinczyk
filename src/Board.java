@@ -4,7 +4,7 @@ import java.util.Random;
 public class Board {
     //mapa (bez domków) sklada sie z 56 pól, czyli 4 czesci po 14 pol
 
-    private final HashMap<Integer, SpecialFieldTypes> specialFields = new HashMap<Integer, SpecialFieldTypes>();
+    private final HashMap<Integer, SpecialFieldTypes> specialFields = new HashMap<>();
     public Board() {
         Random random = new Random();
         SpecialFieldTypes specialField = SpecialFieldTypes.values()[random.nextInt(7)];

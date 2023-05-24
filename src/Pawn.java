@@ -1,17 +1,26 @@
 public class Pawn {
-    public int position = 0;
-    public PawnStatuses status = PawnStatuses.IN_BASE;
+    private int position = 0;
+    private PawnStatuses status = PawnStatuses.IN_BASE;
     public void move(int x) {
-        if ( x == 6  && status == PawnStatuses.IN_BASE ) {
+        if ( validateMove(x))
             position += x;
-            status = PawnStatuses.IN_GAME;
-        }
-        else if ( position + x == 61 ) {
-            position = 61;
-            status = PawnStatuses.IN_END;
-        }
-        else if ( status != PawnStatuses.IN_BASE ) {
-            position += x;
-        }
+    }
+
+    private boolean validateMove(int x) {
+        return position + x >= 0 && position + x <= 61;
+    }
+    public void setStatusGame (PawnStatuses pawnStatus) {
+        status = pawnStatus;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+    public PawnStatuses getStatus() {
+        return status;
     }
 }

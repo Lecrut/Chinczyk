@@ -6,10 +6,18 @@ public class Player {
     public Pawn[] pawns = new Pawn[4];
     private int firstField;
     private int lastField;
-    private Statuses status = Statuses.FREE;
+    private Statuses status;
 
     private int luckCounter = 0;
-
+    Player(Colour color, int newFirstField, int newLastField){
+        colour = color;
+        firstField = newFirstField;
+        lastField = newLastField;
+        status = Statuses.FREE;
+        for(int i = 0; i < 4; i ++){
+            pawns[i] = new Pawn();
+        }
+    }
     private int diceThrow(){
         int min = 1;
         int max = 6;

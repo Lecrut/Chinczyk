@@ -1,6 +1,12 @@
 public class Pawn {
-    private int position = 0;
-    private PawnStatuses status = PawnStatuses.IN_BASE;
+    private int position;
+    private PawnStatuses status;
+
+    public Pawn() {
+        position = 0;
+        status = PawnStatuses.IN_BASE;
+    }
+
     public void move(int x) {
         if ( validateMove(x))
             position += x;

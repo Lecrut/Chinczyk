@@ -1,43 +1,35 @@
 public class Game {
-
     public Player[] players;
-
     public Board board ;
-    private final int playerNumber;
-
-    public Game(int x) {
-        playerNumber = x;
-        players = new Player[x];
+    public Game(int playersNumber ) {
+        players = new Player[playersNumber];
         board = new Board();
-        if ( x >= 1 )
+        if ( playersNumber >= 1 )
             players[0] = new Player(Colour.GREEN, 0, 56);
-        if ( x >= 2 )
+        if ( playersNumber >= 2 )
             players[1] = new Player(Colour.BLUE, 28, 27);
-        if ( x >= 3)
+        if ( playersNumber >= 3)
             players[2] = new Player(Colour.RED, 14, 13);
-        if ( x == 4)
+        if ( playersNumber == 4)
             players[3] = new Player(Colour.YELLOW, 42, 41);
     }
-
     public void round() {
-        for (int i = 0 ; i < playerNumber ; i++ ) {
-            players[i].playerMove();
-            checkBoard(players[i]);
+        for ( Player player : players ) {
+            player.playerMove();
+            checkBoard(player);
         }
     }
-
     private void checkSpecialFields(Player player) {
-        for (int i = 0 ; i < 4 ; i++ ) {
-            if ( player.pawns[i].getStatus() == PawnStatuses.IN_GAME) {
-                SpecialFieldTypes specialFieldType = board.getSpecialField((player.pawns[i].getPosition() + player.getFirstField())%61);
-                triggerSpecialFields(player.pawns[i], specialFieldType);
-                for ( int j = 0 ; j < playerNumber ; j++ ) {
-                    checkCollisionPlayer(player, players[j]);
+        for ( Pawn pawn : player.pawns ) {
+            if ( pawn.getStatus() == PawnStatuses.IN_GAME) {
+                SpecialFieldTypes specialFieldType = board.getSpecialField((pawn.getPosition() + player.getFirstField())%61);
+                triggerSpecialFields(pawn, specialFieldType);
+                for ( Player player1 : players ) {
+                    checkCollisionPlayer(player, player1);
                 }
             }
         }
     }
-
     private int teleportPawn() {
         while (true) {
             int x = (int) (Math.random() * 56);
@@ -59,25 +51,23 @@ public class Game {
             case TELEPORT -> pawn.setPosition(teleportPawn());
         }
     }
-
     private void checkCollisionPlayer(Player player1, Player player2) {
         if ( player1.equals(player2) ) {
             return;
         }
-        for ( int j = 0 ; j < 4 ; j++) {
-            if ( player2.pawns[j].getStatus() == PawnStatuses.IN_GAME ) {
-                for ( int k = 0 ; k < 4 ; k ++) {
-                    if ( player1.pawns[k].getStatus() == PawnStatuses.IN_GAME) {
-                        if ( (player1.pawns[k].getPosition() + player1.getFirstField())%61 == (player2.pawns[j].getPosition() + player2.getFirstField())%61) {
-                            player2.pawns[j].setStatusGame(PawnStatuses.IN_BASE);
-                            player2.pawns[j].setPosition(0);
+        for ( Pawn pawn2 : player2.pawns) {
+            if ( pawn2.getStatus() == PawnStatuses.IN_GAME ) {
+                for ( Pawn pawn1 : player1.pawns ) {
+                    if ( pawn1.getStatus() == PawnStatuses.IN_GAME) {
+                        if ( (pawn1.getPosition() + player1.getFirstField())%61 == (pawn2.getPosition() + player2.getFirstField())%61) {
+                            pawn2.setStatusGame(PawnStatuses.IN_BASE);
+                            pawn2.setPosition(0);
                         }
                     }
                 }
             }
         }
     }
-
     private void checkWinningPawns() {
         for ( Player player : players ) {
             for ( Pawn pawn : player.pawns) {
@@ -89,8 +79,8 @@ public class Game {
     }
 
     public void checkBoard (Player player) {
-        for ( int i = 0 ; i < playerNumber ; i++) {
-            checkCollisionPlayer(player, players[i]);
+        for ( Player player1 : players ) {
+            checkCollisionPlayer(player, player1);
         }
         checkWinningPawns();
         checkSpecialFields(player);

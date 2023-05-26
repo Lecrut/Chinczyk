@@ -20,7 +20,10 @@ public class Game {
     }
 
     public void round() {
-
+        for (int i = 0 ; i < playerNumber ; i++ ) {
+            players[i].playerMove();
+            checkBoard(players[i]);
+        }
     }
 
     private void checkSpecialFields(Player player) {
@@ -75,12 +78,21 @@ public class Game {
         }
     }
 
-
+    private void checkWinningPawns() {
+        for ( Player player : players ) {
+            for ( Pawn pawn : player.pawns) {
+                if ( pawn.getPosition() == 61) {
+                    pawn.setStatusGame(PawnStatuses.IN_END);
+                }
+            }
+        }
+    }
 
     public void checkBoard (Player player) {
         for ( int i = 0 ; i < playerNumber ; i++) {
             checkCollisionPlayer(player, players[i]);
         }
+        checkWinningPawns();
         checkSpecialFields(player);
     }
 }

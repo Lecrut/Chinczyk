@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.Random;
 
 public class Player {
@@ -15,7 +16,8 @@ public class Player {
         lastField = newLastField;
         status = Statuses.FREE;
         for(int i = 0; i < 4; i ++){
-            pawns[i] = new Pawn();
+            //TODO zmienic na odpowiedni kolor ikony
+            pawns[i] = new Pawn(new ImageIcon("assets/pawn.png"));
         }
     }
     private int diceThrow(){

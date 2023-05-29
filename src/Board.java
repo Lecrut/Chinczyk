@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class Board extends JPanel {
-    private final Image image = new ImageIcon("assets/Map.png").getImage();
+    private final Image image = new ImageIcon("../assets/Map.png").getImage();
     //mapa (bez domków) sklada sie z 56 pól, czyli 4 czesci po 14 pol
     private final HashMap<Integer, SpecialFieldTypes> specialFields = new HashMap<>();
 

@@ -2,9 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Game extends JFrame {
-    private final BackgroundPanel backgroundPanel = new BackgroundPanel();
+    private final Board board = new Board();
     public Game() throws HeadlessException {
         setFrameParameters();
+        //TODO tymczasowe pionki
+        board.setPawn(new Pawn(new ImageIcon("assets/pawn.png")), 0);
     }
 
     private void setFrameParameters() {
@@ -14,7 +16,7 @@ public class Game extends JFrame {
         this.setLayout(null);
         this.setVisible(true);
         this.setTitle("Gra chińczyk");
-        this.add(backgroundPanel);
+        this.add(board);
         this.repaint();
     }
 }

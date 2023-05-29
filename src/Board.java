@@ -1,11 +1,15 @@
+import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Random;
 
-public class Board {
+public class Board extends JPanel {
+    private final Image image = new ImageIcon("assets/map.png").getImage();
     //mapa (bez domków) sklada sie z 56 pól, czyli 4 czesci po 14 pol
     private final HashMap<Integer, SpecialFieldTypes> specialFields = new HashMap<>();
 
     public Board() {
+        setGuiParameters();
         // losowanie dla jednej z 4 czesci po trzy pola specjalne
         generateSpecialFields();
     }
@@ -30,5 +34,30 @@ public class Board {
             lowerLimit += 14;
             upperLimit += 14;
         }
+    }
+
+    public void setPawn(Pawn pawn, int index) {
+        pawn.setBounds(110, 100, 150, 150);
+        pawn.setOpaque(false);
+        this.add(pawn);
+        this.repaint();
+    }
+
+    private void setGuiParameters() {
+        this.setOpaque(true);
+        this.setBounds(0, 0, 790, 765);
+        this.setLayout(null);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2D = (Graphics2D) g;
+
+        double scaleX = (double) getWidth() / image.getWidth(null);
+        double scaleY = (double) getHeight() / image.getHeight(null);
+        g2D.scale(scaleX, scaleY);
+
+        g2D.drawImage(image, 0, 0, null);
     }
 }

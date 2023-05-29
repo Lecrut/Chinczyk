@@ -37,6 +37,7 @@ public class Board extends JPanel {
     }
 
     public void setPawn(Pawn pawn, int index) {
+        //TODO do zmiany, wykorzystanie index do pobrania odpowiednich koordynat z tablicy w tej klasie
         pawn.setBounds(110, 100, 150, 150);
         pawn.setOpaque(false);
         this.add(pawn);

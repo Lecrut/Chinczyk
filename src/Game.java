@@ -5,7 +5,7 @@ public class Game extends JFrame {
     private final Board board = new Board();
     public Game() throws HeadlessException {
         setFrameParameters();
-        //TODO tymczasowe pionki
+        //TODO tymczasowy pionek
         board.setPawn(new Pawn(new ImageIcon("assets/pawn.png")), 0);
     }
 

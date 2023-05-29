@@ -11,7 +11,7 @@ public class Game extends JFrame {
         setFrameParameters();
 
         //TODO tymczasowy pionek
-        board.setPawn(new Pawn(new ImageIcon("assets/pawn.png")), 0);
+        board.setPawn(new Pawn(new ImageIcon("../assets/Pawns/PawnBlue.png")), 0);
 
         if (playersNumber >= 1)
             players[0] = new Player(Colour.GREEN, 0, 56);

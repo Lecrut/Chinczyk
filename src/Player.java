@@ -11,13 +11,14 @@ public class Player {
 
     public final static int MAX_DICE_RESULT = 6;
     public final static int MAX_MOVE_COUNT = 3;
+    public final static int PAWNS_AMOUNT = 4;
     private int luckCounter = 0;
     Player(Colour color, int newFirstField, int newLastField){
         colour = color;
         firstField = newFirstField;
         lastField = newLastField;
         status = Statuses.FREE;
-        for(int i = 0; i < 4; i ++){
+        for(int i = 0; i < PAWNS_AMOUNT; i ++){
             //TODO zmienic na odpowiedni kolor ikony
             pawns[i] = new Pawn(new ImageIcon("assets/pawn.png"));
         }

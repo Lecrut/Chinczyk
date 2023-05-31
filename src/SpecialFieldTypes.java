@@ -11,6 +11,7 @@ public enum SpecialFieldTypes {
     }
 
     private static final SpecialFieldTypes[] vals = values();
+    public static final int SPECIAL_FIELDS_COUNT = vals.length;
 
     public SpecialFieldTypes next() {
         return vals[(this.ordinal() + 1) % vals.length];

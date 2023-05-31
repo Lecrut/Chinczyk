@@ -8,6 +8,14 @@ public class Board extends JPanel {
     //mapa (bez domków) sklada sie z 56 pól, czyli 4 czesci po 14 pol
     private final HashMap<Integer, SpecialFieldTypes> specialFields = new HashMap<>();
 
+    private final static int MAP_PARTS_NUMBER = 4;
+    private final static int SPECIALFIELDS_PER_PART_NUMBER = 3;
+    private final static int FIRST_COORDINATE_IN_PART = 1;
+    private final static int LAST_COORDINATE_IN_PART = 14;
+    private final static int PANEL_WIDTH = 790;
+    private final static int PANEL_HEIGHT = 765;
+    public final static int BEGIN_COORDINATE = 0;
+
     public Board() {
         setGuiParameters();
         // losowanie dla jednej z 4 czesci po trzy pola specjalne
@@ -20,10 +28,10 @@ public class Board extends JPanel {
 
     private void generateSpecialFields() {
         Random random = new Random();
-        SpecialFieldTypes specialField = SpecialFieldTypes.values()[random.nextInt(7)];
-        int lowerLimit = 1, upperLimit = 14;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 3; j++) {
+        SpecialFieldTypes specialField = SpecialFieldTypes.values()[random.nextInt(SpecialFieldTypes.SPECIAL_FIELDS_COUNT)];
+        int lowerLimit = FIRST_COORDINATE_IN_PART, upperLimit = LAST_COORDINATE_IN_PART;
+        for (int i = 0; i < MAP_PARTS_NUMBER; i++) {
+            for (int j = 0; j < SPECIALFIELDS_PER_PART_NUMBER; j++) {
                 int nextRand = random.nextInt(upperLimit - lowerLimit) + lowerLimit;
                 while (specialFields.containsKey(nextRand)) {
                     nextRand = random.nextInt(upperLimit - lowerLimit) + lowerLimit;
@@ -31,22 +39,21 @@ public class Board extends JPanel {
                 specialFields.put(nextRand, specialField);
                 specialField = specialField.next();
             }
-            lowerLimit += 14;
-            upperLimit += 14;
+            lowerLimit += LAST_COORDINATE_IN_PART;
+            upperLimit += LAST_COORDINATE_IN_PART;
         }
     }
 
     public void setPawn(Pawn pawn, int index) {
-        //TODO do zmiany, wykorzystanie index do pobrania odpowiednich koordynat z tablicy w tej klasie
-        pawn.setBounds(110, 100, 150, 150);
-        pawn.setOpaque(false);
+        //TODO do zmiany, wykorzystanie index do pobrania odpowiednich koordynat z array listy w tej klasie
+        pawn.setBounds(110, 100, Pawn.PAWN_WIDTH, Pawn.PAWN_HEIGHT);
         this.add(pawn);
         this.repaint();
     }
 
     private void setGuiParameters() {
         this.setOpaque(true);
-        this.setBounds(0, 0, 790, 765);
+        this.setBounds(BEGIN_COORDINATE, BEGIN_COORDINATE, PANEL_WIDTH, PANEL_HEIGHT);
         this.setLayout(null);
     }
 
@@ -59,6 +66,6 @@ public class Board extends JPanel {
         double scaleY = (double) getHeight() / image.getHeight(null);
         g2D.scale(scaleX, scaleY);
 
-        g2D.drawImage(image, 0, 0, null);
+        g2D.drawImage(image, BEGIN_COORDINATE, BEGIN_COORDINATE, null);
     }
 }

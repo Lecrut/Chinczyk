@@ -5,6 +5,13 @@ public class Game extends JFrame {
     private final Player[] players;
     private final Board board;
 
+    private final int AROUND_ROUTE_LENGTH = 56;
+    private final int PAWN_ROUTE = 61;
+    private final int MAP_WIDTH = 800;
+    private final int MAP_HEIGHT = 800;
+    private final static int DISTANCE_BETWEEN_PLAYERS = 14;
+
+
     public Game(int playersNumber) throws HeadlessException {
         players = new Player[playersNumber];
         board = new Board();
@@ -12,15 +19,14 @@ public class Game extends JFrame {
 
         //TODO tymczasowy pionek
         board.setPawn(new Pawn(new ImageIcon("../assets/Pawns/PawnBlue.png")), 0);
-
         if (playersNumber >= 1)
-            players[0] = new Player(Colour.GREEN, 0, 56);
+            players[0] = new Player(Colour.GREEN, 0, 4*DISTANCE_BETWEEN_PLAYERS);
         if (playersNumber >= 2)
-            players[1] = new Player(Colour.BLUE, 28, 27);
+            players[1] = new Player(Colour.BLUE, 2*DISTANCE_BETWEEN_PLAYERS, (2*DISTANCE_BETWEEN_PLAYERS)-1);
         if (playersNumber >= 3)
-            players[2] = new Player(Colour.RED, 14, 13);
+            players[2] = new Player(Colour.RED, DISTANCE_BETWEEN_PLAYERS, DISTANCE_BETWEEN_PLAYERS-1);
         if (playersNumber == 4)
-            players[3] = new Player(Colour.YELLOW, 42, 41);
+            players[3] = new Player(Colour.YELLOW, 3*DISTANCE_BETWEEN_PLAYERS, (3*DISTANCE_BETWEEN_PLAYERS)-1);
     }
 
     public void round() {
@@ -44,7 +50,7 @@ public class Game extends JFrame {
 
     private int teleportPawn() {
         while (true) {
-            int x = (int) (Math.random() * 56);
+            int x = (int) (Math.random() * AROUND_ROUTE_LENGTH);
             if (board.getSpecialField(x) == null) {
                 return x;
             }
@@ -73,7 +79,7 @@ public class Game extends JFrame {
             if (pawn2.getStatus() == PawnStatuses.IN_GAME) {
                 for (Pawn pawn1 : player1.pawns) {
                     if (pawn1.getStatus() == PawnStatuses.IN_GAME) {
-                        if ((pawn1.getPosition() + player1.getFirstField()) % 61 == (pawn2.getPosition() + player2.getFirstField()) % 61) {
+                        if ((pawn1.getPosition() + player1.getFirstField()) % PAWN_ROUTE == (pawn2.getPosition() + player2.getFirstField()) % PAWN_ROUTE) {
                             pawn2.setStatusGame(PawnStatuses.IN_BASE);
                             pawn2.setPosition(0);
                         }
@@ -86,7 +92,7 @@ public class Game extends JFrame {
     private void checkWinningPawns() {
         for (Player player : players) {
             for (Pawn pawn : player.pawns) {
-                if (pawn.getPosition() == 61) {
+                if (pawn.getPosition() == PAWN_ROUTE) {
                     pawn.setStatusGame(PawnStatuses.IN_END);
                 }
             }
@@ -104,7 +110,7 @@ public class Game extends JFrame {
     private void setFrameParameters() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        this.setSize(800, 800);
+        this.setSize(MAP_WIDTH, MAP_HEIGHT);
         this.setLayout(null);
         this.setVisible(true);
         this.setTitle("Gra chińczyk");

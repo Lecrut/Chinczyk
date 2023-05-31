@@ -6,6 +6,9 @@ public class Pawn extends JLabel {
     private int position;
     private PawnStatuses status;
 
+    public final static int PAWN_WIDTH = 150;
+    public final static int PAWN_HEIGHT = 150;
+
     public Pawn(ImageIcon icon) {
         this.icon = icon;
         setGuiParameters();
@@ -19,9 +22,7 @@ public class Pawn extends JLabel {
     }
 
     private void setGuiParameters() {
-        setOpaque(true);
-//        setBackground(Color.WHITE);
-        setBounds(50, 50, 100, 200);
+        setOpaque(false);
     }
     private boolean validateMove(int x) {
         return position + x >= 0 && position + x <= 61;
@@ -44,6 +45,6 @@ public class Pawn extends JLabel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), null);
+        g.drawImage(icon.getImage(), Board.BEGIN_COORDINATE, Board.BEGIN_COORDINATE, getWidth(), getHeight(), null);
     }
 }

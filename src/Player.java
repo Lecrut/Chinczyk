@@ -9,6 +9,8 @@ public class Player {
     private int lastField;
     private Statuses status;
 
+    public final static int MAX_DICE_RESULT = 6;
+    public final static int MAX_MOVE_COUNT = 3;
     private int luckCounter = 0;
     Player(Colour color, int newFirstField, int newLastField){
         colour = color;
@@ -49,9 +51,9 @@ public class Player {
 
         int diceResult = diceThrow();
 
-        if(diceResult == 6){
+        if(diceResult == MAX_DICE_RESULT){
             luckCounter++;
-            if(luckCounter != 3) {
+            if(luckCounter != MAX_MOVE_COUNT) {
                 nextTurn = true;
             }
 

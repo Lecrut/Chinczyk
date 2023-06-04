@@ -2,13 +2,17 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Game extends JFrame {
+    private int numberOfPlayers = 0;
     private final Player[] players;
     private final Board board;
-
+    private final JPanel infoPanel = new JPanel();
+    JButton diceRoll = new JButton("Kostka");
+    JTextField [] table;
     public Game(int playersNumber) throws HeadlessException {
         players = new Player[playersNumber];
         board = new Board();
         setFrameParameters();
+        numberOfPlayers = playersNumber;
 
         //TODO tymczasowy pionek
         board.setPawn(new Pawn(new ImageIcon("assets/pawn.png")), 0);
@@ -55,13 +59,13 @@ public class Game extends JFrame {
         if (fieldType == null)
             return;
         switch (fieldType) {
-            case FORWARD_1 -> pawn.move(1);
-            case FORWARD_2 -> pawn.move(2);
-            case FORWARD_3 -> pawn.move(3);
-            case BACKWARD_1 -> pawn.move(-1);
-            case BACKWARD_2 -> pawn.move(-2);
-            case BACKWARD_3 -> pawn.move(-3);
-            case TELEPORT -> pawn.setPosition(teleportPawn());
+            case FORWARD_1: pawn.move(1);
+            case FORWARD_2: pawn.move(2);
+            case FORWARD_3: pawn.move(3);
+            case BACKWARD_1: pawn.move(-1);
+            case BACKWARD_2: pawn.move(-2);
+            case BACKWARD_3: pawn.move(-3);
+            case TELEPORT: pawn.setPosition(teleportPawn());
         }
     }
 
@@ -102,12 +106,22 @@ public class Game extends JFrame {
     }
 
     private void setFrameParameters() {
+        infoPanel.setBounds(800,0,400,800);
+        infoPanel.setBackground(new Color(0xA65A1D));
+
+        diceRoll.setBackground(Color.white);
+        diceRoll.setFont(new Font("Arial",Font.BOLD,10));
+        diceRoll.setBounds(40,40,40,40);
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        this.setSize(800, 800);
+        this.setSize(1200, 800);
         this.setLayout(null);
         this.setVisible(true);
         this.setTitle("Gra chińczyk");
+
+        infoPanel.add(diceRoll);
+        this.add(infoPanel,BorderLayout.WEST);
         this.add(board);
         this.repaint();
     }

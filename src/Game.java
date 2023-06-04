@@ -3,6 +3,8 @@ import java.awt.*;
 public class Game extends JFrame {
     private final Player[] players;
     private final Board board;
+    private final JPanel infoPanel = new JPanel();
+    JButton diceRoll = new JButton("Kostka");
 
     private final int AROUND_ROUTE_LENGTH = 56;
     private final int PAWN_ROUTE = 61;
@@ -10,8 +12,7 @@ public class Game extends JFrame {
     private final int MAP_HEIGHT = 800;
     private final static int DISTANCE_BETWEEN_PLAYERS = 14;
 
-    private final JPanel infoPanel = new JPanel();
-    JButton diceRoll = new JButton("Kostka");
+
 
 
     public Game(int playersNumber) throws HeadlessException {
@@ -119,7 +120,7 @@ public class Game extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        this.setSize(1200, 800);
+        this.setSize(MAP_WIDTH, MAP_HEIGHT);
         this.setLayout(null);
         this.setVisible(true);
         this.setTitle("Gra chińczyk");

@@ -6,21 +6,11 @@ public class Game extends JFrame {
     private final JPanel infoPanel = new JPanel();
     JButton diceRoll = new JButton("Kostka");
 
-    private final int AROUND_ROUTE_LENGTH = 56;
-    private final int PAWN_ROUTE = 61;
-    private final int MAP_WIDTH = 800;
-    private final int MAP_HEIGHT = 800;
+    private final static int AROUND_ROUTE_LENGTH = 56;
+    private final static int PAWN_ROUTE = 61;
+    private final static int MAP_WIDTH = 800;
+    private final static int MAP_HEIGHT = 800;
     private final static int DISTANCE_BETWEEN_PLAYERS = 14;
-
-
-
-
-    private final int AROUND_ROUTE_LENGTH = 56;
-    private final int PAWN_ROUTE = 61;
-    private final int MAP_WIDTH = 800;
-    private final int MAP_HEIGHT = 800;
-    private final static int DISTANCE_BETWEEN_PLAYERS = 14;
-
 
     public Game(int playersNumber) throws HeadlessException {
         players = new Player[playersNumber];

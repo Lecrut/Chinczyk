@@ -4,11 +4,10 @@ import java.util.Random;
 public class Player {
 
     private Colour colour;
-    public Pawn[] pawns = new Pawn[4];
+    private Pawn[] pawns = new Pawn[4];
     private int firstField;
     private int lastField;
     private Statuses status;
-
     public final static int MAX_DICE_RESULT = 6;
     public final static int MAX_MOVE_COUNT = 3;
     public final static int PAWNS_AMOUNT = 4;
@@ -92,6 +91,10 @@ public class Player {
     public void setColour(Colour newColor) {
         colour = newColor;
     }
-
-
+    public Pawn[] getPawns() {
+        return pawns;
+    }
+    public void setPawns(Pawn[] pawns) {
+        this.pawns = pawns;
+    }
 }

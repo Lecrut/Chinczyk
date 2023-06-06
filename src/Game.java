@@ -1,9 +1,19 @@
 import javax.swing.*;
 import java.awt.*;
-
 public class Game extends JFrame {
     private final Player[] players;
     private final Board board;
+    private final JPanel infoPanel = new JPanel();
+    JButton diceRoll = new JButton("Kostka");
+
+    private final int AROUND_ROUTE_LENGTH = 56;
+    private final int PAWN_ROUTE = 61;
+    private final int MAP_WIDTH = 800;
+    private final int MAP_HEIGHT = 800;
+    private final static int DISTANCE_BETWEEN_PLAYERS = 14;
+
+
+
 
     private final int AROUND_ROUTE_LENGTH = 56;
     private final int PAWN_ROUTE = 61;
@@ -61,13 +71,13 @@ public class Game extends JFrame {
         if (fieldType == null)
             return;
         switch (fieldType) {
-            case FORWARD_1 -> pawn.move(1);
-            case FORWARD_2 -> pawn.move(2);
-            case FORWARD_3 -> pawn.move(3);
-            case BACKWARD_1 -> pawn.move(-1);
-            case BACKWARD_2 -> pawn.move(-2);
-            case BACKWARD_3 -> pawn.move(-3);
-            case TELEPORT -> pawn.setPosition(teleportPawn());
+            case FORWARD_1: pawn.move(1);
+            case FORWARD_2: pawn.move(2);
+            case FORWARD_3: pawn.move(3);
+            case BACKWARD_1: pawn.move(-1);
+            case BACKWARD_2: pawn.move(-2);
+            case BACKWARD_3: pawn.move(-3);
+            case TELEPORT: pawn.setPosition(teleportPawn());
         }
     }
 
@@ -108,12 +118,22 @@ public class Game extends JFrame {
     }
 
     private void setFrameParameters() {
+        infoPanel.setBounds(800,0,400,800);
+        infoPanel.setBackground(new Color(0xA65A1D));
+
+        diceRoll.setBackground(Color.white);
+        diceRoll.setFont(new Font("Arial",Font.BOLD,10));
+        diceRoll.setBounds(40,40,40,40);
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setSize(MAP_WIDTH, MAP_HEIGHT);
         this.setLayout(null);
         this.setVisible(true);
         this.setTitle("Gra chińczyk");
+
+        infoPanel.add(diceRoll);
+        this.add(infoPanel,BorderLayout.WEST);
         this.add(board);
         this.repaint();
     }

@@ -8,8 +8,8 @@ public class Game extends JFrame {
 
     private final static int AROUND_ROUTE_LENGTH = 56;
     private final static int PAWN_ROUTE = 61;
-    private final static int MAP_WIDTH = 800;
-    private final static int MAP_HEIGHT = 800;
+    private final static int GAME_WIDTH = 1200;
+    private final static int GAME_HEIGHT = 800;
     private final static int DISTANCE_BETWEEN_PLAYERS = 14;
 
     public Game(int playersNumber) throws HeadlessException {
@@ -109,7 +109,7 @@ public class Game extends JFrame {
 
     private void setFrameParameters() {
         infoPanel.setBounds(800,0,400,800);
-        infoPanel.setBackground(new Color(0xA65A1D));
+        infoPanel.setBackground(new Color(0x9A0000));
 
         diceRoll.setBackground(Color.white);
         diceRoll.setFont(new Font("Arial",Font.BOLD,10));
@@ -117,7 +117,7 @@ public class Game extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        this.setSize(MAP_WIDTH, MAP_HEIGHT);
+        this.setSize(GAME_WIDTH, GAME_HEIGHT);
         this.setLayout(null);
         this.setVisible(true);
         this.setTitle("Gra chińczyk");

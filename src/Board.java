@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -15,11 +16,74 @@ public class Board extends JPanel {
     private final static int PANEL_WIDTH = 790;
     private final static int PANEL_HEIGHT = 765;
     public final static int BEGIN_COORDINATE = 0;
+    private final ArrayList<Coordinate> fields = new ArrayList<>();
 
     public Board() {
         setGuiParameters();
         // losowanie dla jednej z 4 czesci po trzy pola specjalne
         generateSpecialFields();
+        generateArrayList();
+    }
+
+    public Coordinate getField(int fieldNumber) {
+        return fields.get(fieldNumber);
+    }
+
+    private void generateArrayList() {
+        int beginX = 431;
+        int beginY = 19;
+        int offset = 50;
+        fields.add(new Coordinate(beginX, beginY, false));
+        beginX += offset;
+        for (int i = 0; i < 6; i++) {
+            fields.add(new Coordinate(beginX, beginY, false));
+            beginY += offset;
+        }
+        beginY -= offset;
+        for (int i = 0; i < 5; i++) {
+            beginX += offset;
+            fields.add(new Coordinate(beginX, beginY, false));
+        }
+        for (int i = 0; i < 4; i++) {
+            beginY += offset;
+            fields.add(new Coordinate(beginX, beginY, false));
+        }
+        for (int i = 0; i < 5; i++) {
+            beginX -= offset;
+            fields.add(new Coordinate(beginX, beginY, false));
+        }
+        for (int i = 0; i < 5; i++) {
+            beginY += offset;
+            fields.add(new Coordinate(beginX, beginY, false));
+        }
+        for (int i = 0; i < 4; i++) {
+            beginX -= offset;
+            fields.add(new Coordinate(beginX, beginY, false));
+        }
+        for (int i = 0; i < 5; i++) {
+            beginY -= offset;
+            fields.add(new Coordinate(beginX, beginY, false));
+        }
+        for (int i = 0; i < 5; i++) {
+            beginX -= offset;
+            fields.add(new Coordinate(beginX, beginY, false));
+        }
+        for (int i = 0; i < 4; i++) {
+            beginY -= offset;
+            fields.add(new Coordinate(beginX, beginY, false));
+        }
+        for (int i = 0; i < 5; i++) {
+            beginX += offset;
+            fields.add(new Coordinate(beginX, beginY, false));
+        }
+        for (int i = 0; i < 5; i++) {
+            beginY -= offset;
+            fields.add(new Coordinate(beginX, beginY, false));
+        }
+        for (int i = 0; i < 2; i++) {
+            beginX += offset;
+            fields.add(new Coordinate(beginX, beginY, false));
+        }
     }
 
     public SpecialFieldTypes getSpecialField(int coordinate) {
@@ -45,8 +109,10 @@ public class Board extends JPanel {
     }
 
     public void setPawn(Pawn pawn, int index) {
-        //TODO do zmiany, wykorzystanie index do pobrania odpowiednich koordynat z array listy w tej klasie
-        pawn.setBounds(110, 100, Pawn.PAWN_WIDTH, Pawn.PAWN_HEIGHT);
+        Coordinate field = getField(index);
+        double scaleX =  image.getWidth(null) / (double) getWidth();
+        double scaleY = image.getHeight(null) / (double) getHeight();
+        pawn.setBounds((int)(field.getX()*scaleX), (int)(field.getY()*scaleY), Pawn.PAWN_WIDTH, Pawn.PAWN_HEIGHT);
         this.add(pawn);
         this.repaint();
     }

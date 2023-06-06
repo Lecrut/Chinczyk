@@ -2,31 +2,35 @@ import javax.swing.*;
 import java.awt.*;
 public class Game extends JFrame {
     private final Player[] players;
+    private Player currentPlayer;
     private final Board board;
     private final JPanel infoPanel = new JPanel();
     JButton diceRoll = new JButton("Kostka");
 
     private final static int AROUND_ROUTE_LENGTH = 56;
     private final static int PAWN_ROUTE = 61;
-    private final static int GAME_WIDTH = 1200;
-    private final static int GAME_HEIGHT = 800;
+    private final static int MAP_WIDTH = 1200;
+    private final static int MAP_HEIGHT = 800;
     private final static int DISTANCE_BETWEEN_PLAYERS = 14;
 
     public Game(int playersNumber) throws HeadlessException {
         players = new Player[playersNumber];
         board = new Board();
-        setFrameParameters();
 
         //TODO tymczasowy pionek
         board.setPawn(new Pawn(new ImageIcon("../assets/Pawns/PawnBlue.png")), 0);
         if (playersNumber >= 1)
-            players[0] = new Player(Colour.GREEN, 0, 4*DISTANCE_BETWEEN_PLAYERS);
+            players[0] = new Player(PossibleColors.GREEN, 0, 4*DISTANCE_BETWEEN_PLAYERS);
         if (playersNumber >= 2)
-            players[1] = new Player(Colour.BLUE, 2*DISTANCE_BETWEEN_PLAYERS, (2*DISTANCE_BETWEEN_PLAYERS)-1);
+            players[1] = new Player(PossibleColors.BLUE, 2*DISTANCE_BETWEEN_PLAYERS, (2*DISTANCE_BETWEEN_PLAYERS)-1);
         if (playersNumber >= 3)
-            players[2] = new Player(Colour.RED, DISTANCE_BETWEEN_PLAYERS, DISTANCE_BETWEEN_PLAYERS-1);
+            players[2] = new Player(PossibleColors.RED, DISTANCE_BETWEEN_PLAYERS, DISTANCE_BETWEEN_PLAYERS-1);
         if (playersNumber == 4)
-            players[3] = new Player(Colour.YELLOW, 3*DISTANCE_BETWEEN_PLAYERS, (3*DISTANCE_BETWEEN_PLAYERS)-1);
+            players[3] = new Player(PossibleColors.YELLOW, 3*DISTANCE_BETWEEN_PLAYERS, (3*DISTANCE_BETWEEN_PLAYERS)-1);
+
+        currentPlayer = players[2];
+
+        setFrameParameters();
     }
 
     public void round() {
@@ -109,7 +113,7 @@ public class Game extends JFrame {
 
     private void setFrameParameters() {
         infoPanel.setBounds(800,0,400,800);
-        infoPanel.setBackground(new Color(0x9A0000));
+        infoPanel.setBackground(currentPlayer.getPlayerColor());
 
         diceRoll.setBackground(Color.white);
         diceRoll.setFont(new Font("Arial",Font.BOLD,10));
@@ -117,7 +121,7 @@ public class Game extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        this.setSize(GAME_WIDTH, GAME_HEIGHT);
+        this.setSize(MAP_WIDTH, MAP_HEIGHT);
         this.setLayout(null);
         this.setVisible(true);
         this.setTitle("Gra chińczyk");

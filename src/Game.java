@@ -15,6 +15,13 @@ public class Game extends JFrame {
 
 
 
+    private final int AROUND_ROUTE_LENGTH = 56;
+    private final int PAWN_ROUTE = 61;
+    private final int MAP_WIDTH = 800;
+    private final int MAP_HEIGHT = 800;
+    private final static int DISTANCE_BETWEEN_PLAYERS = 14;
+
+
     public Game(int playersNumber) throws HeadlessException {
         players = new Player[playersNumber];
         board = new Board();
@@ -40,7 +47,7 @@ public class Game extends JFrame {
     }
 
     private void checkSpecialFields(Player player) {
-        for (Pawn pawn : player.pawns) {
+        for (Pawn pawn : player.getPawns()) {
             if (pawn.getStatus() == PawnStatuses.IN_GAME) {
                 SpecialFieldTypes specialFieldType = board.getSpecialField((pawn.getPosition() + player.getFirstField()) % 61);
                 triggerSpecialFields(pawn, specialFieldType);
@@ -78,9 +85,9 @@ public class Game extends JFrame {
         if (player1.equals(player2)) {
             return;
         }
-        for (Pawn pawn2 : player2.pawns) {
+        for (Pawn pawn2 : player2.getPawns()) {
             if (pawn2.getStatus() == PawnStatuses.IN_GAME) {
-                for (Pawn pawn1 : player1.pawns) {
+                for (Pawn pawn1 : player1.getPawns()) {
                     if (pawn1.getStatus() == PawnStatuses.IN_GAME) {
                         if ((pawn1.getPosition() + player1.getFirstField()) % PAWN_ROUTE == (pawn2.getPosition() + player2.getFirstField()) % PAWN_ROUTE) {
                             pawn2.setStatusGame(PawnStatuses.IN_BASE);
@@ -94,7 +101,7 @@ public class Game extends JFrame {
 
     private void checkWinningPawns() {
         for (Player player : players) {
-            for (Pawn pawn : player.pawns) {
+            for (Pawn pawn : player.getPawns()) {
                 if (pawn.getPosition() == PAWN_ROUTE) {
                     pawn.setStatusGame(PawnStatuses.IN_END);
                 }

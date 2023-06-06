@@ -1,9 +1,8 @@
 import javax.swing.*;
-import java.util.Random;
+import java.awt.*;
 
 public class Player {
-
-    private Colour colour;
+    private final Color playerColor;
     private Pawn[] pawns = new Pawn[4];
     private int firstField;
     private int lastField;
@@ -12,8 +11,8 @@ public class Player {
     public final static int MAX_MOVE_COUNT = 3;
     public final static int PAWNS_AMOUNT = 4;
     private int luckCounter = 0;
-    Player(Colour color, int newFirstField, int newLastField){
-        colour = color;
+    Player(PossibleColors color, int newFirstField, int newLastField){
+        playerColor = new Color(color.getColorName());
         firstField = newFirstField;
         lastField = newLastField;
         status = Statuses.FREE;
@@ -70,10 +69,6 @@ public class Player {
             chosenPawn.move(diceResult);
         }
     }
-
-    public Colour getColour() {
-        return colour;
-    }
     public int getFirstField() {
         return firstField;
     }
@@ -87,14 +82,14 @@ public class Player {
     public void setLastField(int coords){
         lastField = coords;
     }
-
-    public void setColour(Colour newColor) {
-        colour = newColor;
-    }
     public Pawn[] getPawns() {
         return pawns;
     }
     public void setPawns(Pawn[] pawns) {
         this.pawns = pawns;
+    }
+
+    public Color getPlayerColor() {
+        return playerColor;
     }
 }

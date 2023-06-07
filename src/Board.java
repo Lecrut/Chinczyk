@@ -178,6 +178,19 @@ public class Board extends JPanel {
         this.repaint();
     }
 
+    public void setPawnStartBase(Pawn pawn, PossibleColors color ) {
+        double scaleX = image.getWidth(null) / (double) getWidth();
+        double scaleY = image.getHeight(null) / (double) getHeight();
+        for ( Coordinate field : startBase.get(color)) {
+            if ( !field.isOccupied() ) {
+                pawn.setBounds((int) (field.getX() * scaleX), (int) (field.getY() * scaleY), Pawn.PAWN_WIDTH, Pawn.PAWN_HEIGHT);
+                field.setOccupied(true);
+                this.add(pawn);
+                this.repaint();
+                return;
+            }
+        }
+    }
     private void setGuiParameters() {
         this.setOpaque(true);
         this.setBounds(BEGIN_COORDINATE, BEGIN_COORDINATE, PANEL_WIDTH, PANEL_HEIGHT);

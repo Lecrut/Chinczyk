@@ -1,18 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+
 public class Game extends JFrame {
+    private final int roundCounter = 0;
     private final Player[] players;
     private Player currentPlayer;
     private final Board board;
     private final JPanel infoPanel = new JPanel();
-    JButton diceRoll = new JButton("Kostka");
+    private final JLabel textInfo = new JLabel();
+    private final JButton diceRoll = new JButton("Kostka");
+
+    private final ArrayList<PossibleColors> winnersTable = new ArrayList<>();
 
     private final static int AROUND_ROUTE_LENGTH = 56;
     private final static int PAWN_ROUTE = 61;
     private final static int MAP_WIDTH = 1200;
     private final static int MAP_HEIGHT = 800;
     private final static int DISTANCE_BETWEEN_PLAYERS = 14;
-    public final static int FINAL_PATH = PAWN_ROUTE - AROUND_ROUTE_LENGTH - 1 ;
+    public final static int FINAL_PATH = PAWN_ROUTE - AROUND_ROUTE_LENGTH - 1;
 
     public Game(int playersNumber) throws HeadlessException {
         players = new Player[playersNumber];
@@ -21,15 +27,15 @@ public class Game extends JFrame {
         //TODO tymczasowy pionek
         board.setPawn(new Pawn(new ImageIcon("./assets/Pawns/PawnBlue.png")), 0);
         if (playersNumber >= 1) {
-            players[0] = new Player(PossibleColors.GREEN, 0, 4*DISTANCE_BETWEEN_PLAYERS);
-            for ( Pawn pawn : players[0].getPawns()) {
-                board.setPawnStartBase(pawn, PossibleColors.GREEN );
+            players[0] = new Player(PossibleColors.GREEN, 0, 4 * DISTANCE_BETWEEN_PLAYERS);
+            for (Pawn pawn : players[0].getPawns()) {
+                board.setPawnStartBase(pawn, PossibleColors.GREEN);
             }
         }
         if (playersNumber >= 2) {
-            players[1] = new Player(PossibleColors.BLUE, 2*DISTANCE_BETWEEN_PLAYERS, (2*DISTANCE_BETWEEN_PLAYERS)-1);
-            for ( Pawn pawn : players[1].getPawns()) {
-                board.setPawnStartBase(pawn, PossibleColors.BLUE );
+            players[1] = new Player(PossibleColors.BLUE, 2 * DISTANCE_BETWEEN_PLAYERS, (2 * DISTANCE_BETWEEN_PLAYERS) - 1);
+            for (Pawn pawn : players[1].getPawns()) {
+                board.setPawnStartBase(pawn, PossibleColors.BLUE);
             }
         }
         if (playersNumber >= 3) {
@@ -38,13 +44,12 @@ public class Game extends JFrame {
                 board.setPawnStartBase(pawn, PossibleColors.RED);
             }
         }
-        if (playersNumber == 4){
-            players[3] = new Player(PossibleColors.YELLOW, 3*DISTANCE_BETWEEN_PLAYERS, (3*DISTANCE_BETWEEN_PLAYERS)-1);
+        if (playersNumber == 4) {
+            players[3] = new Player(PossibleColors.YELLOW, 3 * DISTANCE_BETWEEN_PLAYERS, (3 * DISTANCE_BETWEEN_PLAYERS) - 1);
             for (Pawn pawn : players[3].getPawns()) {
                 board.setPawnStartBase(pawn, PossibleColors.YELLOW);
             }
         }
-
         currentPlayer = players[1];
 
         setFrameParameters();
@@ -82,13 +87,20 @@ public class Game extends JFrame {
         if (fieldType == null)
             return;
         switch (fieldType) {
-            case FORWARD_1: pawn.move(1);
-            case FORWARD_2: pawn.move(2);
-            case FORWARD_3: pawn.move(3);
-            case BACKWARD_1: pawn.move(-1);
-            case BACKWARD_2: pawn.move(-2);
-            case BACKWARD_3: pawn.move(-3);
-            case TELEPORT: pawn.setPosition(teleportPawn());
+            case FORWARD_1:
+                pawn.move(1);
+            case FORWARD_2:
+                pawn.move(2);
+            case FORWARD_3:
+                pawn.move(3);
+            case BACKWARD_1:
+                pawn.move(-1);
+            case BACKWARD_2:
+                pawn.move(-2);
+            case BACKWARD_3:
+                pawn.move(-3);
+            case TELEPORT:
+                pawn.setPosition(teleportPawn());
         }
     }
 
@@ -103,7 +115,7 @@ public class Game extends JFrame {
                         if ((pawn1.getPosition() + player1.getFirstField()) % PAWN_ROUTE == (pawn2.getPosition() + player2.getFirstField()) % PAWN_ROUTE) {
                             pawn2.setStatusGame(PawnStatuses.IN_BASE);
                             pawn2.setPosition(0);
-                            board.setPawnStartBase(pawn2, player2.getPlayerColorName() );
+                            board.setPawnStartBase(pawn2, player2.getPlayerColorName());
                         }
                     }
                 }
@@ -130,13 +142,43 @@ public class Game extends JFrame {
         checkSpecialFields(player);
     }
 
+    public boolean checkWinners() {
+        for (Player player : players) {
+            if (player.getStatus() == Statuses.WINNER) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setInformation(Player pl) {
+        if (checkWinners()) {
+            String x = "<html><pre>ROUND: " + roundCounter + "\nTURN: " + pl.getPlayerColorName() + "\n<ol>";
+            for (PossibleColors color : winnersTable) {
+                x += "<li>" + color + "</li>";
+            }
+            x += "</ol></pre><html>";
+            textInfo.setText(x);
+        } else {
+            textInfo.setText("<html><pre>ROUND: " + roundCounter + "\nTURN: " + pl.getPlayerColorName() + "</pre><html>");
+        }
+
+    }
+
     private void setFrameParameters() {
-        infoPanel.setBounds(800,0,400,800);
+        infoPanel.setBounds(800, 0, 400, 800);
         infoPanel.setBackground(currentPlayer.getPlayerColor());
 
+        textInfo.setBackground(new Color(255, 255, 255));
+        textInfo.setForeground(new Color(255, 255, 255));
+        textInfo.setHorizontalAlignment(JLabel.CENTER);
+        textInfo.setFont(new Font("Arial", Font.BOLD, 40));
+
+        setInformation(currentPlayer);
+
         diceRoll.setBackground(Color.white);
-        diceRoll.setFont(new Font("Arial",Font.BOLD,10));
-        diceRoll.setBounds(40,40,40,40);
+        diceRoll.setFont(new Font("Arial", Font.BOLD, 10));
+        diceRoll.setBounds(40, 40, 40, 40);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -146,7 +188,8 @@ public class Game extends JFrame {
         this.setTitle("Gra chińczyk");
 
         infoPanel.add(diceRoll);
-        this.add(infoPanel,BorderLayout.WEST);
+        infoPanel.add(textInfo, BorderLayout.SOUTH);
+        this.add(infoPanel, BorderLayout.WEST);
         this.add(board);
         this.repaint();
     }

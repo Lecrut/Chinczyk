@@ -6,7 +6,10 @@ public class Player {
     private Pawn[] pawns = new Pawn[4];
     private int firstField;
     private int lastField;
-    private Statuses status;
+
+
+
+    private final Statuses status;
     public final static int MAX_DICE_RESULT = 6;
     public final static int MAX_MOVE_COUNT = 3;
     public final static int PAWNS_AMOUNT = 4;
@@ -108,5 +111,9 @@ public class Player {
 
     public PossibleColors getPlayerColorName() {
         return playerColorName;
+    }
+
+    public Statuses getStatus() {
+        return status;
     }
 }

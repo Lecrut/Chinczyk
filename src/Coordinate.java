@@ -1,12 +1,12 @@
 public class Coordinate {
     private final int x;
     private final int y;
-    private boolean free;
+    private boolean occupied;
 
     public Coordinate(int x, int y, boolean flag) {
         this.x = x;
         this.y = y;
-        this.free = flag;
+        this.occupied = flag;
     }
 
     public int getX() {
@@ -17,11 +17,11 @@ public class Coordinate {
         return this.y;
     }
 
-    public boolean isFree() {
-        return free;
+    public boolean isOccupied() {
+        return occupied;
     }
 
-    public void setFree(boolean free) {
-        this.free = free;
+    public void setOccupied(boolean free) {
+        this.occupied = free;
     }
 }

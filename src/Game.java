@@ -20,16 +20,32 @@ public class Game extends JFrame {
 
         //TODO tymczasowy pionek
         board.setPawn(new Pawn(new ImageIcon("../assets/Pawns/PawnBlue.png")), 0);
-        if (playersNumber >= 1)
+        if (playersNumber >= 1) {
             players[0] = new Player(PossibleColors.GREEN, 0, 4*DISTANCE_BETWEEN_PLAYERS);
-        if (playersNumber >= 2)
+            for ( Pawn pawn : players[0].getPawns()) {
+                board.setPawnStartBase(pawn, PossibleColors.GREEN );
+            }
+        }
+        if (playersNumber >= 2) {
             players[1] = new Player(PossibleColors.BLUE, 2*DISTANCE_BETWEEN_PLAYERS, (2*DISTANCE_BETWEEN_PLAYERS)-1);
-        if (playersNumber >= 3)
-            players[2] = new Player(PossibleColors.RED, DISTANCE_BETWEEN_PLAYERS, DISTANCE_BETWEEN_PLAYERS-1);
-        if (playersNumber == 4)
+            for ( Pawn pawn : players[1].getPawns()) {
+                board.setPawnStartBase(pawn, PossibleColors.BLUE );
+            }
+        }
+        if (playersNumber >= 3) {
+            players[2] = new Player(PossibleColors.RED, DISTANCE_BETWEEN_PLAYERS, DISTANCE_BETWEEN_PLAYERS - 1);
+            for (Pawn pawn : players[2].getPawns()) {
+                board.setPawnStartBase(pawn, PossibleColors.RED);
+            }
+        }
+        if (playersNumber == 4){
             players[3] = new Player(PossibleColors.YELLOW, 3*DISTANCE_BETWEEN_PLAYERS, (3*DISTANCE_BETWEEN_PLAYERS)-1);
+            for (Pawn pawn : players[3].getPawns()) {
+                board.setPawnStartBase(pawn, PossibleColors.YELLOW);
+            }
+        }
 
-        currentPlayer = players[2];
+        currentPlayer = players[1];
 
         setFrameParameters();
     }

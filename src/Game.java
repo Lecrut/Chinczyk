@@ -18,7 +18,7 @@ public class Game extends JFrame {
         players = new Player[playersNumber];
         board = new Board();
 
-        //TODO tymczasowy pionek
+        //TODO: tymczasowy pionek
         board.setPawn(new Pawn(new ImageIcon("../assets/Pawns/PawnBlue.png")), 0);
         if (playersNumber >= 1) {
             players[0] = new Player(PossibleColors.GREEN, 0, 4*DISTANCE_BETWEEN_PLAYERS);
@@ -103,6 +103,7 @@ public class Game extends JFrame {
                         if ((pawn1.getPosition() + player1.getFirstField()) % PAWN_ROUTE == (pawn2.getPosition() + player2.getFirstField()) % PAWN_ROUTE) {
                             pawn2.setStatusGame(PawnStatuses.IN_BASE);
                             pawn2.setPosition(0);
+                            board.setPawnStartBase(pawn2, player2.getPlayerColorName() );
                         }
                     }
                 }
@@ -115,6 +116,7 @@ public class Game extends JFrame {
             for (Pawn pawn : player.getPawns()) {
                 if (pawn.getPosition() == PAWN_ROUTE) {
                     pawn.setStatusGame(PawnStatuses.IN_END);
+                    board.setPawnEndBase(pawn, player.getPlayerColorName());
                 }
             }
         }

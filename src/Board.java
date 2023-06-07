@@ -192,6 +192,10 @@ public class Board extends JPanel {
         }
     }
 
+    public void setPawnEndPath(Pawn pawn, PossibleColors color) {
+        setPawnBase(pawn, color, endPath);
+    }
+
     public void setPawnStartBase(Pawn pawn, PossibleColors color) {
         setPawnBase(pawn, color, startBase);
     }

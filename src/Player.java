@@ -21,7 +21,7 @@ public class Player {
         status = Statuses.FREE;
         for (int i = 0; i < PAWNS_AMOUNT; i++) {
             //TODO zmienic na odpowiedni kolor ikony
-            pawns[i] = new Pawn(new ImageIcon("../assets/pawn.png"));
+            pawns[i] = new Pawn(new ImageIcon("./assets/pawn.png"));
         }
     }
 

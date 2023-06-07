@@ -18,8 +18,8 @@ public class Game extends JFrame {
         players = new Player[playersNumber];
         board = new Board();
 
-        //TODO: tymczasowy pionek
-        board.setPawn(new Pawn(new ImageIcon("../assets/Pawns/PawnBlue.png")), 0);
+        //TODO tymczasowy pionek
+        board.setPawn(new Pawn(new ImageIcon("./assets/Pawns/PawnBlue.png")), 0);
         if (playersNumber >= 1) {
             players[0] = new Player(PossibleColors.GREEN, 0, 4*DISTANCE_BETWEEN_PLAYERS);
             for ( Pawn pawn : players[0].getPawns()) {

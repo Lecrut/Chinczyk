@@ -12,6 +12,7 @@ public class Game extends JFrame {
     private final static int MAP_WIDTH = 1200;
     private final static int MAP_HEIGHT = 800;
     private final static int DISTANCE_BETWEEN_PLAYERS = 14;
+    public final static int FINAL_PATH = PAWN_ROUTE - AROUND_ROUTE_LENGTH - 1 ;
 
     public Game(int playersNumber) throws HeadlessException {
         players = new Player[playersNumber];

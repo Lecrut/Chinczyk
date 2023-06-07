@@ -11,8 +11,10 @@ public class Player {
     public final static int MAX_MOVE_COUNT = 3;
     public final static int PAWNS_AMOUNT = 4;
     private int luckCounter = 0;
+    private final PossibleColors playerColorName;
 
     Player(PossibleColors color, int newFirstField, int newLastField) {
+        playerColorName = color;
         playerColor = new Color(color.getColorName());
         firstField = newFirstField;
         lastField = newLastField;
@@ -98,5 +100,9 @@ public class Player {
 
     public Color getPlayerColor() {
         return playerColor;
+    }
+
+    public PossibleColors getPlayerColorName() {
+        return playerColorName;
     }
 }

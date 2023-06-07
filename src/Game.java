@@ -103,6 +103,7 @@ public class Game extends JFrame {
                         if ((pawn1.getPosition() + player1.getFirstField()) % PAWN_ROUTE == (pawn2.getPosition() + player2.getFirstField()) % PAWN_ROUTE) {
                             pawn2.setStatusGame(PawnStatuses.IN_BASE);
                             pawn2.setPosition(0);
+                            board.setPawnStartBase(pawn2, player2.getPlayerColorName() );
                         }
                     }
                 }
@@ -115,6 +116,7 @@ public class Game extends JFrame {
             for (Pawn pawn : player.getPawns()) {
                 if (pawn.getPosition() == PAWN_ROUTE) {
                     pawn.setStatusGame(PawnStatuses.IN_END);
+                    board.setPawnEndBase(pawn, player.getPlayerColorName());
                 }
             }
         }

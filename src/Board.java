@@ -215,9 +215,9 @@ public class Board extends JPanel {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
 
-        double scaleX = (double) getWidth() / image.getWidth(null);
-        double scaleY = (double) getHeight() / image.getHeight(null);
-        g2D.scale(scaleX, scaleY);
+//        double scaleX = (double) getWidth() / image.getWidth(null);
+//        double scaleY = (double) getHeight() / image.getHeight(null);
+//        g2D.scale(scaleX, scaleY);
 
         g2D.drawImage(image, BEGIN_COORDINATE, BEGIN_COORDINATE, null);
         specialFields.forEach(

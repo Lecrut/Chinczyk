@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Game extends JFrame  {
+public class Game extends JFrame {
     private final int roundCounter = 0;
     private final Player[] players;
     private Player currentPlayer;
@@ -29,8 +29,9 @@ public class Game extends JFrame  {
 
         //TODO tymczasowy pionek
         board.setPawn(new Pawn(new ImageIcon("./assets/Pawns/PawnBlue.png")), 0);
+
         if (playersNumber >= 1) {
-            players[0] = new Player(PossibleColors.GREEN, 0, 4 * DISTANCE_BETWEEN_PLAYERS);
+            players[0] = new Player(PossibleColors.GREEN, 0, 4 * DISTANCE_BETWEEN_PLAYERS - 1);
             for (Pawn pawn : players[0].getPawns()) {
                 board.setPawnStartBase(pawn, PossibleColors.GREEN);
             }
@@ -53,16 +54,22 @@ public class Game extends JFrame  {
                 board.setPawnStartBase(pawn, PossibleColors.YELLOW);
             }
         }
-        currentPlayer = players[1];
+        currentPlayer = players[0];
 
         setFrameParameters();
     }
 
     public void round() {
         for (Player player : players) {
-            player.playerMove();
+            currentPlayer = player;
+            infoPanel.setBackground(currentPlayer.getPlayerColor());
+             player.playerMove();
             checkBoard(player);
         }
+    }
+
+    public ArrayList<PossibleColors> getWinnersTable() {
+        return winnersTable;
     }
 
     private void checkSpecialFields(Player player) {
@@ -156,9 +163,6 @@ public class Game extends JFrame  {
         checkWinningPawns();
         checkSpecialFields(player);
     }
-
-
-
 
     public boolean checkWinners() {
         for (Player player : players) {

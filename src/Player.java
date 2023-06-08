@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.concurrent.CountDownLatch;
 
 public class Player {
     private final Color playerColor;
@@ -39,10 +42,56 @@ public class Player {
         pawn.setStatusGame(PawnStatuses.IN_GAME);
     }
 
-    private Pawn choosePawn() {
+    private Pawn choosePawn(int diceResult) {
+        final CountDownLatch latch = new CountDownLatch(1);
+        final Pawn[] clickedPawn = new Pawn[1];
+        boolean allPawnsInaccessible = true;
 
-        //TODO: TU TRZEBA DODAC WYBOR PIONKA ZA POMOCĄ GUI, SPRAWDZENIE CZY DANY PIONEK MOZE BYC RUSZONY
-        return pawns[0];
+        for (Pawn pawn : pawns) {
+            if (checkPawn(pawn, diceResult)) {
+                allPawnsInaccessible = false;
+                pawn.setBorder(BorderFactory.createLineBorder(Color.white, 2, true));
+                pawn.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        clickedPawn[0] = (Pawn) e.getSource();
+
+                        latch.countDown(); // Zwalnianie CountDownLatch po kliknięciu
+                    }
+                });
+                pawn.setListening(true);
+            }
+        }
+
+        if (allPawnsInaccessible) {
+            latch.countDown();
+            return null;
+        }
+
+        try {
+            latch.await(); // Oczekiwanie na kliknięcie
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Usuwanie listenerów
+        for (Pawn pawn : pawns) {
+            if (pawn.isListening()) {
+                pawn.removeMouseListener(pawn.getMouseListeners()[0]);
+                pawn.setBorder(null);
+                pawn.setListening(false);
+            }
+        }
+
+        return clickedPawn[0];
+    }
+
+
+    private boolean checkPawn(Pawn pawn, int diceResult) {
+        if (diceResult == MAX_DICE_RESULT && pawn.getStatus() == PawnStatuses.IN_BASE) {
+            return true;
+        }
+        return pawn.validateMove(diceResult) && pawn.getStatus() == PawnStatuses.IN_GAME;
     }
 
     private boolean leaveHomeCheck() {
@@ -58,6 +107,7 @@ public class Player {
         boolean nextTurn = false;
 
         int diceResult = diceThrow();
+        System.out.printf("%d %s\n", diceResult, this.getPlayerColorName());
 
         if (diceResult == MAX_DICE_RESULT) {
             luckCounter++;
@@ -67,13 +117,20 @@ public class Player {
 
             if (nextTurn) {
                 if (leaveHomeCheck()) {
-                    movePawnToGame(choosePawn());
+                    Pawn chosenPawn = choosePawn(diceResult);
+                    if (chosenPawn == null) {
+                        return;
+                    }
+                    movePawnToGame(chosenPawn);
                 }
                 playerMove();
             }
             luckCounter = 0;
         } else {
-            Pawn chosenPawn = choosePawn();
+            Pawn chosenPawn = choosePawn(diceResult);
+            if (chosenPawn == null) {
+                return;
+            }
             chosenPawn.move(diceResult);
         }
     }

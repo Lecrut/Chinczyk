@@ -220,5 +220,25 @@ public class Board extends JPanel {
         g2D.scale(scaleX, scaleY);
 
         g2D.drawImage(image, BEGIN_COORDINATE, BEGIN_COORDINATE, null);
+        specialFields.forEach(
+                (key, value) -> {
+                    switch (value) {
+                        case FORWARD_1 ->
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_1.png").getImage(), (int) (fields.get(key).getX() / scaleX), (int) (fields.get(key).getY() / scaleY), null);
+                        case FORWARD_2 ->
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_2.png").getImage(), (int) (fields.get(key).getX() / scaleX), (int) (fields.get(key).getY() / scaleY), null);
+                        case FORWARD_3 ->
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_3.png").getImage(), (int) (fields.get(key).getX() / scaleX), (int) (fields.get(key).getY() / scaleY), null);
+                        case BACKWARD_1 ->
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_1.png").getImage(), (int) (fields.get(key).getX() / scaleX), (int) (fields.get(key).getY() / scaleY), null);
+                        case BACKWARD_2 ->
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_2.png").getImage(), (int) (fields.get(key).getX() / scaleX), (int) (fields.get(key).getY() / scaleY), null);
+                        case BACKWARD_3 ->
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_3.png").getImage(), (int) (fields.get(key).getX() / scaleX), (int) (fields.get(key).getY() / scaleY), null);
+                        case TELEPORT ->
+                                g2D.drawImage(new ImageIcon("./assets/Fields/TeleportField.png").getImage(), (int) (fields.get(key).getX() / scaleX), (int) (fields.get(key).getY() / scaleY), null);
+                    }
+                }
+        );
     }
 }

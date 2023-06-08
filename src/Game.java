@@ -134,7 +134,20 @@ public class Game extends JFrame  {
                     board.setPawnEndBase(pawn, player.getPlayerColorName());
                 }
             }
+            if (checkWinnigPlayer(player)) {
+                winnersTable.add(player.getPlayerColorName());
+                player.setStatusWinner();
+            }
         }
+    }
+
+    public boolean checkWinnigPlayer(Player player) {
+        for (Pawn pawn : player.getPawns()) {
+            if (pawn.getStatus() != PawnStatuses.IN_END) {
+                return false;
+            }
+        }
+        return true;
     }
     public void checkBoard(Player player) {
         for (Player player1 : players) {

@@ -2,16 +2,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Game extends JFrame {
+public class Game extends JFrame  {
     private final int roundCounter = 0;
     private final Player[] players;
     private Player currentPlayer;
     private final Board board;
     private final JPanel infoPanel = new JPanel();
     private final JLabel textInfo = new JLabel();
-    private final JButton rollDice = new JButton("Dice Roll");
+    private final JLabel dicePlaceholder = new JLabel();
     private final ImageIcon[] diceViews = new ImageIcon[6];
-    private final JLabel diceView = new JLabel();
+    private final JButton diceView = new JButton();
 
     private final ArrayList<PossibleColors> winnersTable = new ArrayList<>();
 
@@ -21,6 +21,7 @@ public class Game extends JFrame {
     private final static int MAP_HEIGHT = 800;
     private final static int DISTANCE_BETWEEN_PLAYERS = 14;
     public final static int FINAL_PATH = PAWN_ROUTE - AROUND_ROUTE_LENGTH - 1;
+    public final static int PANEL_DIMENSTIONS = 400;
 
     public Game(int playersNumber) throws HeadlessException {
         players = new Player[playersNumber];
@@ -143,18 +144,7 @@ public class Game extends JFrame {
         checkSpecialFields(player);
     }
 
-    public void setDiceViews (){
-        diceViews[0] = new ImageIcon("./assets/Dice/DiceImage1.png");
-        diceViews[1] = new ImageIcon("./assets/Dice/DiceImage2.png");
-        diceViews[2] = new ImageIcon("./assets/Dice/DiceImage3.png");
-        diceViews[3] = new ImageIcon("./assets/Dice/DiceImage4.png");
-        diceViews[4] = new ImageIcon("./assets/Dice/DiceImage5.png");
-        diceViews[5] = new ImageIcon("./assets/Dice/DiceImage6.png");
-    }
 
-    public void rollDice (){
-
-    }
 
 
     public boolean checkWinners() {
@@ -181,26 +171,44 @@ public class Game extends JFrame {
     }
 
     public void settingDiceView (int diceResult){
-        diceView.setIcon(diceViews[diceResult]);
+        diceView.setIcon(diceViews[diceResult-1]);
+    }
+
+    public void setDiceViews (){
+        diceViews[0] = new ImageIcon("./assets/Dice/DiceImage1.png");
+        diceViews[1] = new ImageIcon("./assets/Dice/DiceImage2.png");
+        diceViews[2] = new ImageIcon("./assets/Dice/DiceImage3.png");
+        diceViews[3] = new ImageIcon("./assets/Dice/DiceImage4.png");
+        diceViews[4] = new ImageIcon("./assets/Dice/DiceImage5.png");
+        diceViews[5] = new ImageIcon("./assets/Dice/DiceImage6.png");
+
+        diceView.setForeground(Color.white);
+        diceView.setPreferredSize(new Dimension(60,60));
+        diceView.setBounds(170,50,60,60);
+        dicePlaceholder.add(diceView);
+
+        settingDiceView(1); // widok poczatkowy przed pierwszym rzutem
     }
 
     private void setFrameParameters() {
-        infoPanel.setBounds(800, 0, 400, 800);
+        infoPanel.setBounds(800, 0, PANEL_DIMENSTIONS, PANEL_DIMENSTIONS*2);
         infoPanel.setBackground(currentPlayer.getPlayerColor());
 
+        textInfo.setPreferredSize(new Dimension(PANEL_DIMENSTIONS,PANEL_DIMENSTIONS));
         textInfo.setBackground(new Color(255, 255, 255));
         textInfo.setForeground(new Color(255, 255, 255));
         textInfo.setHorizontalAlignment(JLabel.CENTER);
         textInfo.setFont(new Font("Arial", Font.BOLD, 40));
+        textInfo.setBounds(0,0,50,50);
+
+        dicePlaceholder.setPreferredSize(new Dimension(PANEL_DIMENSTIONS,PANEL_DIMENSTIONS/2));
+        dicePlaceholder.setHorizontalAlignment(JLabel.CENTER);
+
+        infoPanel.add(dicePlaceholder);
+        infoPanel.add(textInfo, BorderLayout.CENTER);
 
         setInformation(currentPlayer);
-
         setDiceViews();
-        settingDiceView(1);
-
-        rollDice.setBackground(Color.white);
-        rollDice.setFont(new Font("Arial", Font.BOLD, 10));
-        rollDice.setBounds(40, 40, 40, 40);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -209,9 +217,6 @@ public class Game extends JFrame {
         this.setVisible(true);
         this.setTitle("Gra chińczyk");
 
-        infoPanel.add(rollDice);
-        infoPanel.add(textInfo, BorderLayout.SOUTH);
-        infoPanel.add(diceView);
         this.add(infoPanel, BorderLayout.WEST);
         this.add(board);
         this.repaint();

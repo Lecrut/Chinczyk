@@ -21,7 +21,7 @@ public class Game extends JFrame {
     private final static int MAP_HEIGHT = 800;
     private final static int DISTANCE_BETWEEN_PLAYERS = 14;
     public final static int FINAL_PATH = PAWN_ROUTE - AROUND_ROUTE_LENGTH - 1;
-    public final static int PANEL_DIMENSTIONS = 400;
+    public final static int PANEL_DIMENSIONS = 400;
     public final static int DICE_SIZE = 80;
     public Game(int playersNumber) throws HeadlessException {
         players = new Player[playersNumber];
@@ -141,14 +141,14 @@ public class Game extends JFrame {
                     board.setPawnEndBase(pawn, player.getPlayerColorName());
                 }
             }
-            if (checkWinnigPlayer(player)) {
+            if (checkWinningPlayer(player)) {
                 winnersTable.add(player.getPlayerColorName());
                 player.setStatusWinner();
             }
         }
     }
 
-    public boolean checkWinnigPlayer(Player player) {
+    public boolean checkWinningPlayer(Player player) {
         for (Pawn pawn : player.getPawns()) {
             if (pawn.getStatus() != PawnStatuses.IN_END) {
                 return false;
@@ -173,16 +173,16 @@ public class Game extends JFrame {
         return false;
     }
 
-    public void setInformation(Player pl) {
+    public void setInformation() {
         if (checkWinners()) {
-            String x = "<html><pre>ROUND: " + roundCounter + "\nTURN: " + pl.getPlayerColorName() + "\n<ol>";
+            String x = "<html><pre>ROUND: " + roundCounter + "\nTURN: " + currentPlayer.getPlayerColorName() + "\n<ol>";
             for (PossibleColors color : winnersTable) {
                 x += "<li>" + color + "</li>";
             }
             x += "</ol></pre><html>";
             textInfo.setText(x);
         } else {
-            textInfo.setText("<html><pre>ROUND: " + roundCounter + "\nTURN: " + pl.getPlayerColorName() + "</pre><html>");
+            textInfo.setText("<html><pre>ROUND: " + roundCounter + "\nTURN: " + currentPlayer.getPlayerColorName() + "</pre><html>");
         }
 
     }
@@ -208,23 +208,23 @@ public class Game extends JFrame {
     }
 
     private void setFrameParameters() {
-        infoPanel.setBounds(800, 0, PANEL_DIMENSTIONS, PANEL_DIMENSTIONS*2);
+        infoPanel.setBounds(800, 0, PANEL_DIMENSIONS, PANEL_DIMENSIONS *2);
         infoPanel.setBackground(currentPlayer.getPlayerColor());
 
-        textInfo.setPreferredSize(new Dimension(PANEL_DIMENSTIONS,PANEL_DIMENSTIONS));
+        textInfo.setPreferredSize(new Dimension(PANEL_DIMENSIONS, PANEL_DIMENSIONS));
         textInfo.setBackground(new Color(255, 255, 255));
         textInfo.setForeground(new Color(255, 255, 255));
         textInfo.setHorizontalAlignment(JLabel.CENTER);
         textInfo.setFont(new Font("Arial", Font.BOLD, 40));
         textInfo.setBounds(0,0,50,50);
 
-        dicePlaceholder.setPreferredSize(new Dimension(PANEL_DIMENSTIONS,PANEL_DIMENSTIONS/2));
+        dicePlaceholder.setPreferredSize(new Dimension(PANEL_DIMENSIONS, PANEL_DIMENSIONS /2));
         dicePlaceholder.setHorizontalAlignment(JLabel.CENTER);
 
         infoPanel.add(dicePlaceholder);
         infoPanel.add(textInfo, BorderLayout.CENTER);
 
-        setInformation(currentPlayer);
+        setInformation();
         setDiceViews();
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

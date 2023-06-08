@@ -196,11 +196,11 @@ public class Game extends JFrame  {
         diceViews[5] = new ImageIcon("./assets/Dice/DiceImage6.png");
 
         diceView.setForeground(Color.white);
-        diceView.setPreferredSize(new Dimension(60,60));
-        diceView.setBounds(170,50,60,60);
+        diceView.setPreferredSize(new Dimension(80,80));
+        diceView.setBounds(170,50,80,80);
         dicePlaceholder.add(diceView);
 
-        settingDiceView(1); // widok poczatkowy przed pierwszym rzutem
+        settingDiceView(5); // widok poczatkowy przed pierwszym rzutem
     }
 
     private void setFrameParameters() {

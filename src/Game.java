@@ -26,8 +26,9 @@ public class Game extends JFrame {
 
         //TODO tymczasowy pionek
         board.setPawn(new Pawn(new ImageIcon("./assets/Pawns/PawnBlue.png")), 0);
+        
         if (playersNumber >= 1) {
-            players[0] = new Player(PossibleColors.GREEN, 0, 4 * DISTANCE_BETWEEN_PLAYERS);
+            players[0] = new Player(PossibleColors.GREEN, 0, 4 * DISTANCE_BETWEEN_PLAYERS - 1);
             for (Pawn pawn : players[0].getPawns()) {
                 board.setPawnStartBase(pawn, PossibleColors.GREEN);
             }
@@ -50,16 +51,22 @@ public class Game extends JFrame {
                 board.setPawnStartBase(pawn, PossibleColors.YELLOW);
             }
         }
-        currentPlayer = players[1];
+        currentPlayer = players[0];
 
         setFrameParameters();
     }
 
     public void round() {
         for (Player player : players) {
-            player.playerMove();
+            currentPlayer = player;
+            infoPanel.setBackground(currentPlayer.getPlayerColor());
+             player.playerMove();
             checkBoard(player);
         }
+    }
+
+    public ArrayList<PossibleColors> getWinnersTable() {
+        return winnersTable;
     }
 
     private void checkSpecialFields(Player player) {
@@ -167,7 +174,6 @@ public class Game extends JFrame {
 
     private void setFrameParameters() {
         infoPanel.setBounds(800, 0, 400, 800);
-        infoPanel.setBackground(currentPlayer.getPlayerColor());
 
         textInfo.setBackground(new Color(255, 255, 255));
         textInfo.setForeground(new Color(255, 255, 255));
@@ -189,6 +195,7 @@ public class Game extends JFrame {
 
         infoPanel.add(diceRoll);
         infoPanel.add(textInfo, BorderLayout.SOUTH);
+        infoPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.add(infoPanel, BorderLayout.WEST);
         this.add(board);
         this.repaint();

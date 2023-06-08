@@ -5,10 +5,11 @@ public class Pawn extends JLabel {
     private final ImageIcon icon;
     private int position;
     private PawnStatuses status;
+    private boolean listening = false;
     private final int PAWN_ROUTE = 61;
     private final int PAWN_START = 0;
-    public final static int PAWN_WIDTH = 150;
-    public final static int PAWN_HEIGHT = 150;
+    public final static int PAWN_WIDTH = 30;
+    public final static int PAWN_HEIGHT = 30;
 
     public Pawn(ImageIcon icon) {
         this.icon = icon;
@@ -18,17 +19,27 @@ public class Pawn extends JLabel {
     }
 
     public void move(int boardFieldsToMove) {
-        if ( validateMove(boardFieldsToMove))
+        if (validateMove(boardFieldsToMove))
             position += boardFieldsToMove;
+    }
+
+    public boolean isListening() {
+        return listening;
+    }
+
+    public void setListening(boolean listening) {
+        this.listening = listening;
     }
 
     private void setGuiParameters() {
         setOpaque(false);
     }
-    private boolean validateMove(int boardFieldsToMove) {
+
+    public boolean validateMove(int boardFieldsToMove) {
         return position + boardFieldsToMove >= PAWN_START && position + boardFieldsToMove <= PAWN_ROUTE;
     }
-    public void setStatusGame (PawnStatuses pawnStatus) {
+
+    public void setStatusGame(PawnStatuses pawnStatus) {
         status = pawnStatus;
     }
 
@@ -39,6 +50,7 @@ public class Pawn extends JLabel {
     public int getPosition() {
         return position;
     }
+
     public PawnStatuses getStatus() {
         return status;
     }

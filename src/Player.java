@@ -6,10 +6,7 @@ public class Player {
     private Pawn[] pawns = new Pawn[4];
     private int firstField;
     private int lastField;
-
-
-
-    private final Statuses status;
+    private Statuses status;
     public final static int MAX_DICE_RESULT = 6;
     public final static int MAX_MOVE_COUNT = 3;
     public final static int PAWNS_AMOUNT = 4;
@@ -79,6 +76,10 @@ public class Player {
             Pawn chosenPawn = choosePawn();
             chosenPawn.move(diceResult);
         }
+    }
+
+    public void setStatusWinner() {
+        status = Statuses.WINNER;
     }
 
     public int getFirstField() {

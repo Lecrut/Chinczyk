@@ -22,7 +22,7 @@ public class Game extends JFrame  {
     private final static int DISTANCE_BETWEEN_PLAYERS = 14;
     public final static int FINAL_PATH = PAWN_ROUTE - AROUND_ROUTE_LENGTH - 1;
     public final static int PANEL_DIMENSTIONS = 400;
-
+    public final static int DICE_SIZE = 80;
     public Game(int playersNumber) throws HeadlessException {
         players = new Player[playersNumber];
         board = new Board();
@@ -196,11 +196,11 @@ public class Game extends JFrame  {
         diceViews[5] = new ImageIcon("./assets/Dice/DiceImage6.png");
 
         diceView.setForeground(Color.white);
-        diceView.setPreferredSize(new Dimension(80,80));
-        diceView.setBounds(170,50,80,80);
+        diceView.setPreferredSize(new Dimension(DICE_SIZE,DICE_SIZE));
+        diceView.setBounds(170,50,DICE_SIZE,DICE_SIZE);
         dicePlaceholder.add(diceView);
 
-        settingDiceView(5); // widok poczatkowy przed pierwszym rzutem
+        settingDiceView(1); // widok poczatkowy przed pierwszym rzutem
     }
 
     private void setFrameParameters() {

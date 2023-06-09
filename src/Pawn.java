@@ -6,8 +6,8 @@ public class Pawn extends JLabel {
     private int position;
     private PawnStatuses status;
     private boolean listening = false;
-    private final int PAWN_ROUTE = 61;
-    private final int PAWN_START = 0;
+    public final static int PAWN_ROUTE = 60;
+    private final static int PAWN_START = 0;
     public final static int PAWN_WIDTH = 30;
     public final static int PAWN_HEIGHT = 30;
 

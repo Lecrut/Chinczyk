@@ -16,11 +16,10 @@ public class Game extends JFrame {
     private final ArrayList<PossibleColors> winnersTable = new ArrayList<>();
 
     private final static int AROUND_ROUTE_LENGTH = 56;
-    private final static int PAWN_ROUTE = 61;
     private final static int MAP_WIDTH = 1200;
     private final static int MAP_HEIGHT = 800;
     private final static int DISTANCE_BETWEEN_PLAYERS = 14;
-    public final static int FINAL_PATH = PAWN_ROUTE - AROUND_ROUTE_LENGTH - 1;
+    public final static int FINAL_PATH = Pawn.PAWN_ROUTE - AROUND_ROUTE_LENGTH;
     public final static int PANEL_DIMENSIONS = 400;
     public final static int DICE_SIZE = 80;
 
@@ -109,7 +108,7 @@ public class Game extends JFrame {
         }
         if (pawn.getPosition() < AROUND_ROUTE_LENGTH)
             board.setPawn(pawn, (pawn.getPosition() + player.getFirstField()) % AROUND_ROUTE_LENGTH);
-        else if (pawn.getPosition() == PAWN_ROUTE)
+        else if (pawn.getPosition() == Pawn.PAWN_ROUTE)
             board.setPawnEndBase(pawn, player.getPlayerColorName());
         else
             board.setPawnEndPath(pawn, player.getPlayerColorName(), pawn.getPosition() - AROUND_ROUTE_LENGTH);
@@ -136,12 +135,12 @@ public class Game extends JFrame {
 
     private void checkWinningPawns() {
         for (Player player : players) {
-            for (Pawn pawn : player.getPawns()) {
-                if (pawn.getPosition() == PAWN_ROUTE) {
-                    pawn.setStatusGame(PawnStatuses.IN_END);
-                    board.setPawnEndBase(pawn, player.getPlayerColorName());
-                }
-            }
+//            for (Pawn pawn : player.getPawns()) {
+//                if (pawn.getPosition() == Pawn.PAWN_ROUTE) {
+//                    pawn.setStatusGame(PawnStatuses.IN_END);
+//                    board.setPawnEndBase(pawn, player.getPlayerColorName());
+//                }
+//            }
             if (checkWinningPlayer(player)) {
                 winnersTable.add(player.getPlayerColorName());
                 player.setStatusWinner();

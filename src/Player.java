@@ -14,7 +14,6 @@ public class Player {
     public final static int MAX_MOVE_COUNT = 3;
     public final static int PAWNS_AMOUNT = 4;
     private final static int AROUND_ROUTE_LENGTH = 56;
-    private final static int PAWN_ROUTE = 61;
     private final PossibleColors playerColorName;
 
     Player(PossibleColors color, int newFirstField, int newLastField) {
@@ -126,7 +125,7 @@ public class Player {
                 chosenPawn.move(diceResult);
                 if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
                     board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
-                else if (chosenPawn.getPosition() == PAWN_ROUTE)
+                else if (chosenPawn.getPosition() == Pawn.PAWN_ROUTE)
                     board.setPawnEndBase(chosenPawn, getPlayerColorName());
                 else
                     board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
@@ -140,7 +139,7 @@ public class Player {
             chosenPawn.move(diceResult);
             if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
                 board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
-            else if (chosenPawn.getPosition() == PAWN_ROUTE - 1)
+            else if (chosenPawn.getPosition() == Pawn.PAWN_ROUTE)
                 board.setPawnEndBase(chosenPawn, getPlayerColorName());
             else
                 board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);

@@ -87,7 +87,7 @@ public class Player {
         if (diceResult == MAX_DICE_RESULT && pawn.getStatus() == PawnStatuses.IN_BASE) {
             return true;
         }
-        return pawn.validateMove(diceResult) && pawn.getStatus() == PawnStatuses.IN_GAME;
+        return pawn.validateMove(diceResult) && (pawn.getStatus() == PawnStatuses.IN_GAME || pawn.getStatus() == PawnStatuses.IN_END_PATH);
     }
 
     private boolean leaveHomeCheck() {

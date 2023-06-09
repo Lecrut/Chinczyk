@@ -40,7 +40,7 @@ public class Pawn extends JLabel {
     }
 
     public void setStatusGame(PawnStatuses pawnStatus) {
-        status = pawnStatus;
+        this.status = pawnStatus;
     }
 
     public void setPosition(int position) {

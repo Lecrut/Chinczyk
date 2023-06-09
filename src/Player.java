@@ -120,6 +120,11 @@ public class Player {
             }
             if (chosenPawn.getStatus() == PawnStatuses.IN_BASE) {
                 movePawnToGame(chosenPawn);
+                for ( int i = 0 ; i < 4; i++) {
+                    if ( chosenPawn.equals(pawns[i]) ) {
+                        board.getStartBase().get(playerColorName).get(i).setOccupied(false);
+                    }
+                }
                 board.setPawn(chosenPawn, firstField);
             } else {
                 chosenPawn.move(diceResult);

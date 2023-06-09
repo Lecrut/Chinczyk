@@ -53,6 +53,10 @@ public class Board extends JPanel {
         }
     }
 
+    public HashMap<PossibleColors, ArrayList<Coordinate>> getStartBase() {
+        return startBase;
+    }
+
     public Coordinate getField(int fieldNumber) {
         return fields.get(fieldNumber);
     }

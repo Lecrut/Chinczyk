@@ -76,11 +76,11 @@ public class Game extends JFrame {
     private void checkSpecialFields(Player player) {
         for (Pawn pawn : player.getPawns()) {
             if (pawn.getStatus() == PawnStatuses.IN_GAME) {
-                SpecialFieldTypes specialFieldType = board.getSpecialField((pawn.getPosition() + player.getFirstField()) % 61);
+                SpecialFieldTypes specialFieldType = board.getSpecialField((pawn.getPosition() + player.getFirstField()) % AROUND_ROUTE_LENGTH);
                 triggerSpecialFields(pawn, player, specialFieldType);
-//                for (Player player1 : players) {
-//                    checkCollisionPlayer(player, player1);
-//                }
+                for (Player player1 : players) {
+                    checkCollisionPlayer(player, player1);
+                }
             }
         }
     }
@@ -108,7 +108,7 @@ public class Game extends JFrame {
             case TELEPORT -> pawn.setPosition(teleportPawn());
         }
         if (pawn.getPosition() < AROUND_ROUTE_LENGTH)
-            board.setPawn(pawn, (pawn.getPosition() + player.getFirstField() ) % AROUND_ROUTE_LENGTH);
+            board.setPawn(pawn, (pawn.getPosition() + player.getFirstField()) % AROUND_ROUTE_LENGTH);
         else if (pawn.getPosition() == PAWN_ROUTE)
             board.setPawnEndBase(pawn, player.getPlayerColorName());
         else
@@ -123,7 +123,7 @@ public class Game extends JFrame {
             if (pawn2.getStatus() == PawnStatuses.IN_GAME) {
                 for (Pawn pawn1 : player1.getPawns()) {
                     if (pawn1.getStatus() == PawnStatuses.IN_GAME) {
-                        if ((pawn1.getPosition() + player1.getFirstField()) % PAWN_ROUTE == (pawn2.getPosition() + player2.getFirstField()) % PAWN_ROUTE) {
+                        if ((pawn1.getPosition() + player1.getFirstField()) % AROUND_ROUTE_LENGTH == (pawn2.getPosition() + player2.getFirstField()) % AROUND_ROUTE_LENGTH) {
                             pawn2.setStatusGame(PawnStatuses.IN_BASE);
                             pawn2.setPosition(0);
                             board.setPawnStartBase(pawn2, player2.getPlayerColorName());
@@ -160,7 +160,7 @@ public class Game extends JFrame {
 
     public void checkBoard(Player player) {
         for (Player player1 : players) {
-            //checkCollisionPlayer(player, player1);
+            checkCollisionPlayer(player, player1);
         }
         checkWinningPawns();
         checkSpecialFields(player);

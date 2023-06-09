@@ -58,12 +58,17 @@ public class Game extends JFrame {
 
     public void round() {
         for (Player player : players) {
-            currentPlayer = player;
-            infoPanel.setBackground(currentPlayer.getPlayerColor());
-            boolean nextMove = true;
-            for (int i = 1; nextMove; i++) {
-                nextMove = player.playerMove(board, i);
-                checkBoard(player);
+            if (player.getStatus() == Statuses.FREE) {
+                currentPlayer = player;
+                infoPanel.setBackground(currentPlayer.getPlayerColor());
+                boolean nextMove = true;
+                for (int i = 1; nextMove; i++) {
+                    nextMove = player.playerMove(board, i);
+                    checkBoard(player);
+                    if (player.getStatus() == Statuses.WINNER) {
+                        nextMove = false;
+                    }
+                }
             }
         }
     }
@@ -135,12 +140,6 @@ public class Game extends JFrame {
 
     private void checkWinningPawns() {
         for (Player player : players) {
-//            for (Pawn pawn : player.getPawns()) {
-//                if (pawn.getPosition() == Pawn.PAWN_ROUTE) {
-//                    pawn.setStatusGame(PawnStatuses.IN_END);
-//                    board.setPawnEndBase(pawn, player.getPlayerColorName());
-//                }
-//            }
             if (checkWinningPlayer(player)) {
                 winnersTable.add(player.getPlayerColorName());
                 player.setStatusWinner();
@@ -149,6 +148,8 @@ public class Game extends JFrame {
     }
 
     public boolean checkWinningPlayer(Player player) {
+        if (player.getStatus() == Statuses.WINNER)
+            return false;
         for (Pawn pawn : player.getPawns()) {
             if (pawn.getStatus() != PawnStatuses.IN_END) {
                 return false;

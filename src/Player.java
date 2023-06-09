@@ -103,7 +103,7 @@ public class Player {
         return false;
     }
 
-    public void playerMove() {
+    public void playerMove(Board board) {
         boolean nextTurn = false;
 
         int diceResult = diceThrow();
@@ -122,8 +122,9 @@ public class Player {
                         return;
                     }
                     movePawnToGame(chosenPawn);
+                    board.setPawn(chosenPawn,firstField);
                 }
-                playerMove();
+                playerMove(board);
             }
             luckCounter = 0;
         } else {

@@ -63,7 +63,7 @@ public class Game extends JFrame {
         for (Player player : players) {
             currentPlayer = player;
             infoPanel.setBackground(currentPlayer.getPlayerColor());
-             player.playerMove();
+            player.playerMove(board);
             checkBoard(player);
         }
     }

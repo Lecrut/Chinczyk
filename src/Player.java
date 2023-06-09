@@ -39,10 +39,6 @@ public class Player {
         return (int) Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    private void movePawnToGame(Pawn pawn) {
-        pawn.setStatusGame(PawnStatuses.IN_GAME);
-    }
-
     private Pawn choosePawn(int diceResult) {
         final CountDownLatch latch = new CountDownLatch(1);
         final Pawn[] clickedPawn = new Pawn[1];
@@ -119,9 +115,9 @@ public class Player {
                 return false;
             }
             if (chosenPawn.getStatus() == PawnStatuses.IN_BASE) {
-                movePawnToGame(chosenPawn);
-                for ( int i = 0 ; i < 4; i++) {
-                    if ( chosenPawn.equals(pawns[i]) ) {
+                chosenPawn.setStatusGame(PawnStatuses.IN_GAME);
+                for (int i = 0; i < 4; i++) {
+                    if (chosenPawn.equals(pawns[i])) {
                         board.getStartBase().get(playerColorName).get(i).setOccupied(false);
                     }
                 }

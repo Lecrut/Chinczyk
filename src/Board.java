@@ -201,6 +201,7 @@ public class Board extends JPanel {
     }
 
     public void setPawnEndPath(Pawn pawn, PossibleColors color, int index) {
+        pawn.setStatusGame(PawnStatuses.IN_END_PATH);
         if (index < 0 || index > 3)
             return;
         double scaleX = image.getWidth(null) / (double) getWidth();

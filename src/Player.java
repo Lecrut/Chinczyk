@@ -13,7 +13,8 @@ public class Player {
     public final static int MAX_DICE_RESULT = 6;
     public final static int MAX_MOVE_COUNT = 3;
     public final static int PAWNS_AMOUNT = 4;
-    private int luckCounter = 0;
+    private final static int AROUND_ROUTE_LENGTH = 56;
+    private final static int PAWN_ROUTE = 61;
     private final PossibleColors playerColorName;
 
     Player(PossibleColors color, int newFirstField, int newLastField) {
@@ -103,36 +104,52 @@ public class Player {
         return false;
     }
 
-    public void playerMove() {
+    public boolean playerMove(Board board, int luckCounter) {
         boolean nextTurn = false;
 
         int diceResult = diceThrow();
         System.out.printf("%d %s\n", diceResult, this.getPlayerColorName());
 
         if (diceResult == MAX_DICE_RESULT) {
-            luckCounter++;
             if (luckCounter != MAX_MOVE_COUNT) {
                 nextTurn = true;
             }
-
-            if (nextTurn) {
-                if (leaveHomeCheck()) {
-                    Pawn chosenPawn = choosePawn(diceResult);
-                    if (chosenPawn == null) {
-                        return;
-                    }
-                    movePawnToGame(chosenPawn);
-                }
-                playerMove();
+            Pawn chosenPawn = choosePawn(diceResult);
+            if (chosenPawn == null) {
+                return false;
             }
-            luckCounter = 0;
+            if (chosenPawn.getStatus() == PawnStatuses.IN_BASE) {
+                movePawnToGame(chosenPawn);
+                for ( int i = 0 ; i < 4; i++) {
+                    if ( chosenPawn.equals(pawns[i]) ) {
+                        board.getStartBase().get(playerColorName).get(i).setOccupied(false);
+                    }
+                }
+                board.setPawn(chosenPawn, firstField);
+            } else {
+                chosenPawn.move(diceResult);
+                if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
+                    board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
+                else if (chosenPawn.getPosition() == PAWN_ROUTE)
+                    board.setPawnEndBase(chosenPawn, getPlayerColorName());
+                else
+                    board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
+            }
+            return nextTurn;
         } else {
             Pawn chosenPawn = choosePawn(diceResult);
             if (chosenPawn == null) {
-                return;
+                return false;
             }
             chosenPawn.move(diceResult);
+            if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
+                board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
+            else if (chosenPawn.getPosition() == PAWN_ROUTE - 1)
+                board.setPawnEndBase(chosenPawn, getPlayerColorName());
+            else
+                board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
         }
+        return false;
     }
 
     public void setStatusWinner() {

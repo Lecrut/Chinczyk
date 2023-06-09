@@ -53,6 +53,10 @@ public class Board extends JPanel {
         }
     }
 
+    public HashMap<PossibleColors, ArrayList<Coordinate>> getStartBase() {
+        return startBase;
+    }
+
     public Coordinate getField(int fieldNumber) {
         return fields.get(fieldNumber);
     }
@@ -192,8 +196,15 @@ public class Board extends JPanel {
         }
     }
 
-    public void setPawnEndPath(Pawn pawn, PossibleColors color) {
-        setPawnBase(pawn, color, endPath);
+    public void setPawnEndPath(Pawn pawn, PossibleColors color, int index) {
+        if (index < 0 || index > 3)
+            return;
+        double scaleX = image.getWidth(null) / (double) getWidth();
+        double scaleY = image.getHeight(null) / (double) getHeight();
+        Coordinate field = endPath.get(color).get(index);
+        pawn.setBounds((int) (field.getX() * scaleX), (int) (field.getY() * scaleY), Pawn.PAWN_WIDTH, Pawn.PAWN_HEIGHT);
+        this.add(pawn);
+        this.repaint();
     }
 
     public void setPawnStartBase(Pawn pawn, PossibleColors color) {

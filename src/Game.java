@@ -64,7 +64,7 @@ public class Game extends JFrame {
             boolean nextMove = true;
             for (int i = 1; nextMove; i++) {
                 nextMove = player.playerMove(board, i);
-                checkBoard(player);
+                //checkBoard(player);
             }
         }
     }

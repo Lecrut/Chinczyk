@@ -193,6 +193,8 @@ public class Board extends JPanel {
     }
 
     public void setPawnEndPath(Pawn pawn, PossibleColors color, int index) {
+        if (index < 0 || index > 3)
+            return;
         double scaleX = image.getWidth(null) / (double) getWidth();
         double scaleY = image.getHeight(null) / (double) getHeight();
         Coordinate field = endPath.get(color).get(index);

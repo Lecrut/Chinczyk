@@ -118,18 +118,17 @@ public class Player {
             if (chosenPawn == null) {
                 return false;
             }
-            if ( chosenPawn.getStatus() == PawnStatuses.IN_BASE ) {
+            if (chosenPawn.getStatus() == PawnStatuses.IN_BASE) {
                 movePawnToGame(chosenPawn);
                 board.setPawn(chosenPawn, firstField);
-            }
-            else {
+            } else {
                 chosenPawn.move(diceResult);
                 if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
                     board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
-                else if (chosenPawn.getPosition() == PAWN_ROUTE-1)
+                else if (chosenPawn.getPosition() == PAWN_ROUTE)
                     board.setPawnEndBase(chosenPawn, getPlayerColorName());
                 else
-                    board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH );
+                    board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
             }
             return nextTurn;
         } else {
@@ -140,10 +139,10 @@ public class Player {
             chosenPawn.move(diceResult);
             if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
                 board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
-            else if (chosenPawn.getPosition() == PAWN_ROUTE-1)
+            else if (chosenPawn.getPosition() == PAWN_ROUTE - 1)
                 board.setPawnEndBase(chosenPawn, getPlayerColorName());
             else
-                board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH );
+                board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
         }
         return false;
     }

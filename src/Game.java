@@ -64,7 +64,7 @@ public class Game extends JFrame {
             boolean nextMove = true;
             for (int i = 1; nextMove; i++) {
                 nextMove = player.playerMove(board, i);
-                //checkBoard(player);
+                checkBoard(player);
             }
         }
     }
@@ -77,10 +77,10 @@ public class Game extends JFrame {
         for (Pawn pawn : player.getPawns()) {
             if (pawn.getStatus() == PawnStatuses.IN_GAME) {
                 SpecialFieldTypes specialFieldType = board.getSpecialField((pawn.getPosition() + player.getFirstField()) % 61);
-                triggerSpecialFields(pawn, specialFieldType);
-                for (Player player1 : players) {
-                    checkCollisionPlayer(player, player1);
-                }
+                triggerSpecialFields(pawn, player, specialFieldType);
+//                for (Player player1 : players) {
+//                    checkCollisionPlayer(player, player1);
+//                }
             }
         }
     }
@@ -94,26 +94,25 @@ public class Game extends JFrame {
         }
     }
 
-    private void triggerSpecialFields(Pawn pawn, SpecialFieldTypes fieldType) {
+    private void triggerSpecialFields(Pawn pawn, Player player, SpecialFieldTypes fieldType) {
         if (fieldType == null)
             return;
         System.out.println("\npole specjalne " + fieldType.name() + "\n");
         switch (fieldType) {
-            case FORWARD_1:
-                pawn.move(1);
-            case FORWARD_2:
-                pawn.move(2);
-            case FORWARD_3:
-                pawn.move(3);
-            case BACKWARD_1:
-                pawn.move(-1);
-            case BACKWARD_2:
-                pawn.move(-2);
-            case BACKWARD_3:
-                pawn.move(-3);
-            case TELEPORT:
-                pawn.setPosition(teleportPawn());
+            case FORWARD_1 -> pawn.move(1);
+            case FORWARD_2 -> pawn.move(2);
+            case FORWARD_3 -> pawn.move(3);
+            case BACKWARD_1 -> pawn.move(-1);
+            case BACKWARD_2 -> pawn.move(-2);
+            case BACKWARD_3 -> pawn.move(-3);
+            case TELEPORT -> pawn.setPosition(teleportPawn());
         }
+        if (pawn.getPosition() < AROUND_ROUTE_LENGTH)
+            board.setPawn(pawn, (pawn.getPosition() + player.getFirstField() ) % AROUND_ROUTE_LENGTH);
+        else if (pawn.getPosition() == PAWN_ROUTE)
+            board.setPawnEndBase(pawn, player.getPlayerColorName());
+        else
+            board.setPawnEndPath(pawn, player.getPlayerColorName(), pawn.getPosition() - AROUND_ROUTE_LENGTH);
     }
 
     private void checkCollisionPlayer(Player player1, Player player2) {
@@ -161,10 +160,10 @@ public class Game extends JFrame {
 
     public void checkBoard(Player player) {
         for (Player player1 : players) {
-            checkCollisionPlayer(player, player1);
+            //checkCollisionPlayer(player, player1);
         }
         checkWinningPawns();
-        //checkSpecialFields(player);
+        checkSpecialFields(player);
     }
 
     public boolean checkWinners() {

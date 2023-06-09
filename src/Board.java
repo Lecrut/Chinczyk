@@ -83,14 +83,16 @@ public class Board extends JPanel {
             beginX -= MAP_OFFSET;
             fields.add(new Coordinate(beginX, beginY, false));
         }
+        beginX -= 2;
         for (int i = 0; i < 5; i++) {
             beginY += MAP_OFFSET;
             fields.add(new Coordinate(beginX, beginY, false));
         }
         for (int i = 0; i < 4; i++) {
-            beginX -= MAP_OFFSET;
+            beginX -= MAP_OFFSET+1;
             fields.add(new Coordinate(beginX, beginY, false));
         }
+        beginX -= 4;
         for (int i = 0; i < 5; i++) {
             beginY -= MAP_OFFSET;
             fields.add(new Coordinate(beginX, beginY, false));
@@ -99,6 +101,7 @@ public class Board extends JPanel {
             beginX -= MAP_OFFSET;
             fields.add(new Coordinate(beginX, beginY, false));
         }
+        beginX -= 3;
         for (int i = 0; i < 4; i++) {
             beginY -= MAP_OFFSET;
             fields.add(new Coordinate(beginX, beginY, false));
@@ -107,6 +110,7 @@ public class Board extends JPanel {
             beginX += MAP_OFFSET;
             fields.add(new Coordinate(beginX, beginY, false));
         }
+        beginX += 2;
         for (int i = 0; i < 5; i++) {
             beginY -= MAP_OFFSET;
             fields.add(new Coordinate(beginX, beginY, false));
@@ -231,19 +235,19 @@ public class Board extends JPanel {
                 (key, value) -> {
                     switch (value) {
                         case FORWARD_1 ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_1.png").getImage(), fields.get(key).getX(), fields.get(key).getY(), null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_1.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
                         case FORWARD_2 ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_2.png").getImage(), fields.get(key).getX(), fields.get(key).getY(), null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_2.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
                         case FORWARD_3 ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_3.png").getImage(), fields.get(key).getX(), fields.get(key).getY(), null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_3.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
                         case BACKWARD_1 ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_1.png").getImage(), fields.get(key).getX(), fields.get(key).getY(), null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_1.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
                         case BACKWARD_2 ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_2.png").getImage(), fields.get(key).getX(), fields.get(key).getY(), null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_2.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
                         case BACKWARD_3 ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_3.png").getImage(), fields.get(key).getX(), fields.get(key).getY(), null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_3.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
                         case TELEPORT ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/TeleportField.png").getImage(), fields.get(key).getX(), fields.get(key).getY(), null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/TeleportField.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
                     }
                 }
         );

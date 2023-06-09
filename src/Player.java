@@ -34,7 +34,7 @@ public class Player {
 
     private int diceThrow() {
         int min = 1;
-        int max = 6;
+        int max = 60;
         return (int) Math.floor(Math.random() * (max - min + 1) + min);
     }
 

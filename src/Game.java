@@ -65,6 +65,9 @@ public class Game extends JFrame {
                 for (int i = 1; nextMove; i++) {
                     nextMove = player.playerMove(board, i);
                     checkBoard(player);
+                    if (getWinnersTable().size() == 3) {
+                        nextMove = false;
+                    }
                     if (player.getStatus() == Statuses.WINNER) {
                         nextMove = false;
                     }
@@ -207,6 +210,24 @@ public class Game extends JFrame {
         dicePlaceholder.add(diceView);
 
         settingDiceView(1); // widok poczatkowy przed pierwszym rzutem
+    }
+
+    public void generatePopup() {
+        String x = "Koniec gry\n";
+        int i = 1;
+        for (PossibleColors colors : winnersTable) {
+            x += String.valueOf(i);
+            x += ". ";
+            x += colors;
+            x += "\n";
+            i++;
+        }
+        Frame frame = new Frame();
+        int input = JOptionPane.showConfirmDialog(frame,
+                x, "Koniec gry", JOptionPane.DEFAULT_OPTION);
+        if (input == 0) {
+            System.exit(0);
+        }
     }
 
     private void setFrameParameters() {

@@ -135,12 +135,12 @@ public class Game extends JFrame {
 
     private void checkWinningPawns() {
         for (Player player : players) {
-            for (Pawn pawn : player.getPawns()) {
-                if (pawn.getPosition() == Pawn.PAWN_ROUTE) {
-                    pawn.setStatusGame(PawnStatuses.IN_END);
-                    board.setPawnEndBase(pawn, player.getPlayerColorName());
-                }
-            }
+//            for (Pawn pawn : player.getPawns()) {
+//                if (pawn.getPosition() == Pawn.PAWN_ROUTE) {
+//                    pawn.setStatusGame(PawnStatuses.IN_END);
+//                    board.setPawnEndBase(pawn, player.getPlayerColorName());
+//                }
+//            }
             if (checkWinningPlayer(player)) {
                 winnersTable.add(player.getPlayerColorName());
                 player.setStatusWinner();

@@ -216,6 +216,7 @@ public class Board extends JPanel {
     }
 
     public void setPawnEndBase(Pawn pawn, PossibleColors color) {
+        pawn.setStatusGame(PawnStatuses.IN_END);
         setPawnBase(pawn, color, endBase);
     }
 

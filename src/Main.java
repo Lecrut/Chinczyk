@@ -4,5 +4,6 @@ public class Main {
         while (game.getWinnersTable().size() < 3) { //TODO: do zmiany warunek
             game.round();
         }
+        game.generatePopup();
     }
 }

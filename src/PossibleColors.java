@@ -13,5 +13,5 @@ public enum PossibleColors {
     public int getColorName() {
         return colorName;
     }
-    }
+}
 

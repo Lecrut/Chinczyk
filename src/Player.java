@@ -32,11 +32,11 @@ public class Player {
         }
     }
 
-    private int diceThrow() {
-        int min = 1;
-        int max = 6;
-        return (int) Math.floor(Math.random() * (max - min + 1) + min);
-    }
+//    private int diceThrow() {
+//        int min = 1;
+//        int max = 6;
+//        return (int) Math.floor(Math.random() * (max - min + 1) + min);
+//    }
 
     private Pawn choosePawn(int diceResult) {
         final CountDownLatch latch = new CountDownLatch(1);
@@ -101,9 +101,10 @@ public class Player {
 
     public boolean playerMove(Board board, int luckCounter) {
         boolean nextTurn = false;
+        int diceResult = Dice.getDiceResult();
+//        Dice.setDrawFlag(false);
 
-        int diceResult = diceThrow();
-        System.out.printf("%d %s\n", diceResult, this.getPlayerColorName());
+//        System.out.printf("%d %s\n", diceResult, this.getPlayerColorName());
 
         if (diceResult == MAX_DICE_RESULT) {
             if (luckCounter != MAX_MOVE_COUNT) {
@@ -111,9 +112,12 @@ public class Player {
             }
             Pawn chosenPawn = choosePawn(diceResult);
             if (chosenPawn == null) {
+                Dice.setDrawFlag(true);
                 return false;
             }
             if (chosenPawn.getStatus() == PawnStatuses.IN_BASE) {
+                Dice.setDrawFlag(false);
+                System.out.println("check");
                 chosenPawn.setStatusGame(PawnStatuses.IN_GAME);
                 for (int i = 0; i < 4; i++) {
                     if (chosenPawn.equals(pawns[i])) {
@@ -122,18 +126,23 @@ public class Player {
                 }
                 board.setPawn(chosenPawn, firstField);
             } else {
+                Dice.setDrawFlag(false);
                 chosenPawn.move(diceResult);
-                if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
+                if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH) {
                     board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
-                else if (chosenPawn.getPosition() == Pawn.PAWN_ROUTE)
+                } else if (chosenPawn.getPosition() == Pawn.PAWN_ROUTE){
                     board.setPawnEndBase(chosenPawn, getPlayerColorName());
-                else
+                }
+                else{
                     board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
+                }
             }
+            Dice.setDrawFlag(true);
             return nextTurn;
         } else {
             Pawn chosenPawn = choosePawn(diceResult);
             if (chosenPawn == null) {
+                Dice.setDrawFlag(true);
                 return false;
             }
             chosenPawn.move(diceResult);
@@ -143,6 +152,7 @@ public class Player {
                 board.setPawnEndBase(chosenPawn, getPlayerColorName());
             else
                 board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
+            Dice.setDrawFlag(true);
         }
         return false;
     }

@@ -84,7 +84,7 @@ public class Player {
 
 
     private boolean checkPawn(Pawn pawn, int diceResult) {
-        if (diceResult == MAX_DICE_RESULT && pawn.getStatus() == PawnStatuses.IN_BASE) {
+        if (diceResult == MAX_DICE_RESULT && (pawn.getStatus() == PawnStatuses.IN_BASE || pawn.getStatus() == PawnStatuses.IS_BLOCKED)) {
             return true;
         }
         return pawn.validateMove(diceResult) && (pawn.getStatus() == PawnStatuses.IN_GAME || pawn.getStatus() == PawnStatuses.IN_END_PATH);
@@ -121,7 +121,18 @@ public class Player {
                     }
                 }
                 board.setPawn(chosenPawn, firstField);
-            } else {
+            }
+            else if ( chosenPawn.getStatus() == PawnStatuses.IS_BLOCKED ) {
+                chosenPawn.setStatusGame(PawnStatuses.IN_GAME);
+                chosenPawn.move(1);
+                if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
+                    board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
+                else if (chosenPawn.getPosition() == Pawn.PAWN_ROUTE)
+                    board.setPawnEndBase(chosenPawn, getPlayerColorName());
+                else
+                    board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
+            }
+            else {
                 chosenPawn.move(diceResult);
                 if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
                     board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);

@@ -60,7 +60,7 @@ public class Game extends JFrame {
         for (Player player : players) {
             if (player.getStatus() == Statuses.FREE) {
                 currentPlayer = player;
-                infoPanel.setBackground(currentPlayer.getPlayerColor());
+                setInformation();
                 boolean nextMove = true;
                 for (int i = 1; nextMove; i++) {
                     nextMove = player.playerMove(board, i);
@@ -75,7 +75,6 @@ public class Game extends JFrame {
             }
         }
         roundCounter++;
-        setInformation();
     }
 
     public ArrayList<PossibleColors> getWinnersTable() {
@@ -172,17 +171,9 @@ public class Game extends JFrame {
         checkSpecialFields(player);
     }
 
-    public boolean checkWinners() {
-        for (Player player : players) {
-            if (player.getStatus() == Statuses.WINNER) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void setInformation() {
-        if (checkWinners()) {
+        infoPanel.setBackground(currentPlayer.getPlayerColor());
+        if (getWinnersTable().size() > 0) {
             String x = "<html><pre>ROUND: " + roundCounter + "\nTURN: " + currentPlayer.getPlayerColorName() + "\n<ol>";
             for (PossibleColors color : winnersTable) {
                 x += "<li>" + color + "</li>";

@@ -124,7 +124,9 @@ public class Player {
             }
             else if ( chosenPawn.getStatus() == PawnStatuses.IS_BLOCKED ) {
                 chosenPawn.setStatusGame(PawnStatuses.IN_GAME);
-                chosenPawn.move(1);
+                while ( board.getSpecialField((chosenPawn.getPosition() + getFirstField()) % AROUND_ROUTE_LENGTH) != null ) {
+                    chosenPawn.move(1);
+                }
                 if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
                     board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
                 else if (chosenPawn.getPosition() == Pawn.PAWN_ROUTE)

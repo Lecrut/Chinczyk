@@ -3,7 +3,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Game extends JFrame {
-    private final int roundCounter = 0;
+    private int roundCounter = 1;
     private final Player[] players;
     private Player currentPlayer;
     private final Board board;
@@ -60,7 +60,7 @@ public class Game extends JFrame {
         for (Player player : players) {
             if (player.getStatus() == Statuses.FREE) {
                 currentPlayer = player;
-                infoPanel.setBackground(currentPlayer.getPlayerColor());
+                setInformation();
                 boolean nextMove = true;
                 for (int i = 1; nextMove; i++) {
                     nextMove = player.playerMove(board, i);
@@ -74,6 +74,7 @@ public class Game extends JFrame {
                 }
             }
         }
+        roundCounter++;
     }
 
     public ArrayList<PossibleColors> getWinnersTable() {
@@ -113,6 +114,7 @@ public class Game extends JFrame {
             case BACKWARD_2 -> pawn.move(-2);
             case BACKWARD_3 -> pawn.move(-3);
             case TELEPORT -> pawn.setPosition(teleportPawn());
+            case BLOCKING -> pawn.setStatusGame(PawnStatuses.IS_BLOCKED);
         }
         if (pawn.getPosition() < AROUND_ROUTE_LENGTH)
             board.setPawn(pawn, (pawn.getPosition() + player.getFirstField()) % AROUND_ROUTE_LENGTH);
@@ -127,9 +129,9 @@ public class Game extends JFrame {
             return;
         }
         for (Pawn pawn2 : player2.getPawns()) {
-            if (pawn2.getStatus() == PawnStatuses.IN_GAME) {
+            if (pawn2.getStatus() == PawnStatuses.IN_GAME || pawn2.getStatus() == PawnStatuses.IS_BLOCKED) {
                 for (Pawn pawn1 : player1.getPawns()) {
-                    if (pawn1.getStatus() == PawnStatuses.IN_GAME) {
+                    if (pawn1.getStatus() == PawnStatuses.IN_GAME || pawn1.getStatus() == PawnStatuses.IS_BLOCKED) {
                         if ((pawn1.getPosition() + player1.getFirstField()) % AROUND_ROUTE_LENGTH == (pawn2.getPosition() + player2.getFirstField()) % AROUND_ROUTE_LENGTH) {
                             pawn2.setStatusGame(PawnStatuses.IN_BASE);
                             pawn2.setPosition(0);
@@ -169,17 +171,9 @@ public class Game extends JFrame {
         checkSpecialFields(player);
     }
 
-    public boolean checkWinners() {
-        for (Player player : players) {
-            if (player.getStatus() == Statuses.WINNER) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void setInformation() {
-        if (checkWinners()) {
+        infoPanel.setBackground(currentPlayer.getPlayerColor());
+        if (getWinnersTable().size() > 0) {
             String x = "<html><pre>ROUND: " + roundCounter + "\nTURN: " + currentPlayer.getPlayerColorName() + "\n<ol>";
             for (PossibleColors color : winnersTable) {
                 x += "<li>" + color + "</li>";

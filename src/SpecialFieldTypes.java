@@ -5,7 +5,8 @@ public enum SpecialFieldTypes {
     BACKWARD_1(3),
     BACKWARD_2(4),
     BACKWARD_3(5),
-    TELEPORT(6);
+    TELEPORT(6),
+    BLOCKING(7);
 
     private SpecialFieldTypes(int value) {
     }

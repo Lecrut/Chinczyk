@@ -90,14 +90,6 @@ public class Player {
         return pawn.validateMove(diceResult) && (pawn.getStatus() == PawnStatuses.IN_GAME || pawn.getStatus() == PawnStatuses.IN_END_PATH);
     }
 
-    private boolean leaveHomeCheck() {
-        for (int i = 0; i < 4; i++) {
-            if (pawns[i].getStatus() == PawnStatuses.IN_BASE) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public boolean playerMove(Board board, int luckCounter) {
         boolean nextTurn = false;
@@ -115,33 +107,19 @@ public class Player {
             }
             if (chosenPawn.getStatus() == PawnStatuses.IN_BASE) {
                 chosenPawn.setStatusGame(PawnStatuses.IN_GAME);
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < PAWNS_AMOUNT; i++) {
                     if (chosenPawn.equals(pawns[i])) {
                         board.getStartBase().get(playerColorName).get(i).setOccupied(false);
                     }
                 }
                 board.setPawn(chosenPawn, firstField);
-            }
-            else if ( chosenPawn.getStatus() == PawnStatuses.IS_BLOCKED ) {
+            } else if (chosenPawn.getStatus() == PawnStatuses.IS_BLOCKED) {
                 chosenPawn.setStatusGame(PawnStatuses.IN_GAME);
-                while ( board.getSpecialField((chosenPawn.getPosition() + getFirstField()) % AROUND_ROUTE_LENGTH) != null ) {
-                    chosenPawn.move(1);
+                while (board.getSpecialField((chosenPawn.getPosition() + getFirstField()) % AROUND_ROUTE_LENGTH) != null) {
+                    animatedMove(1, chosenPawn, board);
                 }
-                if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
-                    board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
-                else if (chosenPawn.getPosition() == Pawn.PAWN_ROUTE)
-                    board.setPawnEndBase(chosenPawn, getPlayerColorName());
-                else
-                    board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
-            }
-            else {
-                chosenPawn.move(diceResult);
-                if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
-                    board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
-                else if (chosenPawn.getPosition() == Pawn.PAWN_ROUTE)
-                    board.setPawnEndBase(chosenPawn, getPlayerColorName());
-                else
-                    board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
+            } else {
+                animatedMove(diceResult, chosenPawn, board);
             }
             return nextTurn;
         } else {
@@ -149,15 +127,33 @@ public class Player {
             if (chosenPawn == null) {
                 return false;
             }
-            chosenPawn.move(diceResult);
+            animatedMove(diceResult, chosenPawn, board);
+        }
+        return false;
+    }
+
+    public void animatedMove(int index, Pawn chosenPawn, Board board) {
+        int direction;
+        if ( index > 0 ) {
+            direction = 1;
+        }
+        else {
+            direction = -1;
+        }
+        for (int i = 0; i < Math.abs(index); i++) {
+            chosenPawn.move(direction);
             if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
                 board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
             else if (chosenPawn.getPosition() == Pawn.PAWN_ROUTE)
                 board.setPawnEndBase(chosenPawn, getPlayerColorName());
             else
                 board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
-        return false;
     }
 
     public void setStatusWinner() {

@@ -107,12 +107,12 @@ public class Game extends JFrame {
             return;
         System.out.println("\npole specjalne " + fieldType.name() + "\n");
         switch (fieldType) {
-            case FORWARD_1 -> pawn.move(1);
-            case FORWARD_2 -> pawn.move(2);
-            case FORWARD_3 -> pawn.move(3);
-            case BACKWARD_1 -> pawn.move(-1);
-            case BACKWARD_2 -> pawn.move(-2);
-            case BACKWARD_3 -> pawn.move(-3);
+            case FORWARD_1 -> player.animatedMove(1, pawn, board);
+            case FORWARD_2 -> player.animatedMove(2, pawn, board);
+            case FORWARD_3 -> player.animatedMove(3, pawn, board);
+            case BACKWARD_1 -> player.animatedMove(-1, pawn, board);
+            case BACKWARD_2 -> player.animatedMove(-2, pawn, board);
+            case BACKWARD_3 -> player.animatedMove(-3, pawn, board);
             case TELEPORT -> pawn.setPosition(teleportPawn());
             case BLOCKING -> pawn.setStatusGame(PawnStatuses.IS_BLOCKED);
         }

@@ -174,12 +174,12 @@ public class Game extends JFrame {
     public void setInformation() {
         infoPanel.setBackground(currentPlayer.getPlayerColor());
         if (getWinnersTable().size() > 0) {
-            String x = "<html><pre>ROUND: " + roundCounter + "\nTURN: " + currentPlayer.getPlayerColorName() + "\n<ol>";
+            StringBuilder x = new StringBuilder("<html><pre>ROUND: " + roundCounter + "\nTURN: " + currentPlayer.getPlayerColorName() + "\n<ol>");
             for (PossibleColors color : winnersTable) {
-                x += "<li>" + color + "</li>";
+                x.append("<li>").append(color).append("</li>");
             }
-            x += "</ol></pre><html>";
-            textInfo.setText(x);
+            x.append("</ol></pre><html>");
+            textInfo.setText(x.toString());
         } else {
             textInfo.setText("<html><pre>ROUND: " + roundCounter + "\nTURN: " + currentPlayer.getPlayerColorName() + "</pre><html>");
         }
@@ -207,18 +207,18 @@ public class Game extends JFrame {
     }
 
     public void generatePopup() {
-        String x = "Koniec gry\n";
+        StringBuilder x = new StringBuilder("Koniec gry\n");
         int i = 1;
         for (PossibleColors colors : winnersTable) {
-            x += String.valueOf(i);
-            x += ". ";
-            x += colors;
-            x += "\n";
+            x.append(i);
+            x.append(". ");
+            x.append(colors);
+            x.append("\n");
             i++;
         }
         Frame frame = new Frame();
         int input = JOptionPane.showConfirmDialog(frame,
-                x, "Koniec gry", JOptionPane.DEFAULT_OPTION);
+                x.toString(), "Koniec gry", JOptionPane.DEFAULT_OPTION);
         if (input == 0) {
             System.exit(0);
         }

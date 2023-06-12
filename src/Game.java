@@ -62,9 +62,10 @@ public class Game extends JFrame {
         for (Player player : players) {
             if (player.getStatus() == Statuses.FREE) {
                 currentPlayer = player;
-                setInformation();
+                setInformation(true);
                 boolean nextMove = true;
                 for (int i = 1; nextMove; i++) {
+                    setInformation(true);
                     final CountDownLatch latch = new CountDownLatch(1);
                     dice.addMouseListener(new MouseAdapter() {
                         @Override
@@ -80,6 +81,7 @@ public class Game extends JFrame {
                         e.printStackTrace();
                     }
                     dice.removeMouseListener(dice.getMouseListeners()[0]);
+                    setInformation(false);
                     nextMove = player.playerMove(board, i, dice.getDiceResult());
                     checkBoard(player);
                     if (getWinnersTable().size() == 3) {
@@ -187,19 +189,22 @@ public class Game extends JFrame {
         checkSpecialFields(player);
     }
 
-    public void setInformation() {
+    public void setInformation(boolean isThrow) {
         infoPanel.setBackground(currentPlayer.getPlayerColor());
+        StringBuilder x = new StringBuilder("<html><pre>");
+        if (isThrow) {
+            x.append("Rzuć kostką\n");
+        }
+        x.append("Runda: ").append(roundCounter).append("\nKolej: ").append(currentPlayer.getPlayerColorName());
         if (getWinnersTable().size() > 0) {
-            StringBuilder x = new StringBuilder("<html><pre>ROUND: " + roundCounter + "\nTURN: " + currentPlayer.getPlayerColorName() + "\n<ol>");
+            x.append("\n<ol>");
             for (PossibleColors color : winnersTable) {
                 x.append("<li>").append(color).append("</li>");
             }
-            x.append("</ol></pre><html>");
-            textInfo.setText(x.toString());
-        } else {
-            textInfo.setText("<html><pre>ROUND: " + roundCounter + "\nTURN: " + currentPlayer.getPlayerColorName() + "</pre><html>");
+            x.append("</ol>");
         }
-
+        x.append("</pre><html>");
+        textInfo.setText(x.toString());
     }
 
     public void setDiceView(int diceResult) {
@@ -248,7 +253,7 @@ public class Game extends JFrame {
         infoPanel.add(dicePlaceholder);
         infoPanel.add(textInfo, BorderLayout.CENTER);
 
-        setInformation();
+        setInformation(false);
         setDiceView(1);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

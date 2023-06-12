@@ -1,9 +1,9 @@
 public class Main {
-    private static final int numberOfPlayers = 4;
-
+    static int PLAYERS_NUMBER;
     public static void main(String[] args) {
-        Game game = new Game(numberOfPlayers);
-        while (game.getWinnersTable().size() < numberOfPlayers - 1) {
+        PLAYERS_NUMBER = Game.startMenu();
+        Game game = new Game(PLAYERS_NUMBER);
+        while (game.getWinnersTable().size() < PLAYERS_NUMBER - 1) {
             game.round();
         }
         game.generatePopup();

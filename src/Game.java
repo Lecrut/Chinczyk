@@ -140,6 +140,12 @@ public class Game extends JFrame {
             board.setPawnEndBase(pawn, player.getPlayerColorName());
         else
             board.setPawnEndPath(pawn, player.getPlayerColorName(), pawn.getPosition() - AROUND_ROUTE_LENGTH);
+        SpecialFieldTypes checkSF = board.getSpecialField((pawn.getPosition() + player.getFirstField()) % AROUND_ROUTE_LENGTH);
+        if (checkSF == SpecialFieldTypes.BLOCKING && pawn.getStatus() != PawnStatuses.IS_BLOCKED)
+            triggerSpecialFields(pawn, player, SpecialFieldTypes.BLOCKING);
+        else if (checkSF == SpecialFieldTypes.TELEPORT) {
+            triggerSpecialFields(pawn, player, SpecialFieldTypes.TELEPORT);
+        }
     }
 
     private void checkCollisionPlayer(Player player1, Player player2) {

@@ -6,11 +6,9 @@ import java.util.Random;
 
 public class Board extends JPanel {
     private final Image image = new ImageIcon("./assets/Map.png").getImage();
-    //mapa (bez domków) sklada sie z 56 pól, czyli 4 czesci po 14 pol
     private final HashMap<Integer, SpecialFieldTypes> specialFields = new HashMap<>();
-
     private final static int MAP_PARTS_NUMBER = 4;
-    private final static int SPECIALFIELDS_PER_PART_NUMBER = 3;
+    private final static int SPECIAL_FIELDS_PER_PART_NUMBER = 3;
     private final static int FIRST_COORDINATE_IN_PART = 1;
     private final static int LAST_COORDINATE_IN_PART = 14;
     private final static int PANEL_WIDTH = 790;
@@ -24,7 +22,6 @@ public class Board extends JPanel {
 
     public Board() {
         setGuiParameters();
-        // losowanie dla jednej z 4 czesci po trzy pola specjalne
         generateSpecialFields();
         generateArrayList();
         for (PossibleColors color : PossibleColors.values()) {
@@ -57,10 +54,6 @@ public class Board extends JPanel {
         return startBase;
     }
 
-    public Coordinate getField(int fieldNumber) {
-        return fields.get(fieldNumber);
-    }
-
     private void generateArrayList() {
         int beginX = 431;
         int beginY = 19;
@@ -89,7 +82,7 @@ public class Board extends JPanel {
             fields.add(new Coordinate(beginX, beginY, false));
         }
         for (int i = 0; i < 4; i++) {
-            beginX -= MAP_OFFSET+1;
+            beginX -= MAP_OFFSET + 1;
             fields.add(new Coordinate(beginX, beginY, false));
         }
         beginX -= 4;
@@ -130,12 +123,12 @@ public class Board extends JPanel {
     }
 
     private ArrayList<Coordinate> createArray(int x, int y) {
-        ArrayList<Coordinate> temp = new ArrayList<>();
-        temp.add(new Coordinate(x, y, false));
-        temp.add(new Coordinate(x, y + MAP_OFFSET, false));
-        temp.add(new Coordinate(x + MAP_OFFSET, y, false));
-        temp.add(new Coordinate(x + MAP_OFFSET, y + MAP_OFFSET, false));
-        return temp;
+        ArrayList<Coordinate> newArray = new ArrayList<>();
+        newArray.add(new Coordinate(x, y, false));
+        newArray.add(new Coordinate(x, y + MAP_OFFSET, false));
+        newArray.add(new Coordinate(x + MAP_OFFSET, y, false));
+        newArray.add(new Coordinate(x + MAP_OFFSET, y + MAP_OFFSET, false));
+        return newArray;
     }
 
     private void generatePathCoordinates(int x, int y, boolean horizontally, int offset, PossibleColors color) {
@@ -163,7 +156,7 @@ public class Board extends JPanel {
         SpecialFieldTypes specialField = SpecialFieldTypes.values()[random.nextInt(SpecialFieldTypes.SPECIAL_FIELDS_COUNT)];
         int lowerLimit = FIRST_COORDINATE_IN_PART, upperLimit = LAST_COORDINATE_IN_PART;
         for (int i = 0; i < MAP_PARTS_NUMBER; i++) {
-            for (int j = 0; j < SPECIALFIELDS_PER_PART_NUMBER; j++) {
+            for (int j = 0; j < SPECIAL_FIELDS_PER_PART_NUMBER; j++) {
                 int nextRand = random.nextInt(upperLimit - lowerLimit) + lowerLimit;
                 while (specialFields.containsKey(nextRand)) {
                     nextRand = random.nextInt(upperLimit - lowerLimit) + lowerLimit;
@@ -179,7 +172,6 @@ public class Board extends JPanel {
     public void setPawn(Pawn pawn, int index) {
         double scaleX = image.getWidth(null) / (double) getWidth();
         double scaleY = image.getHeight(null) / (double) getHeight();
-        //Coordinate field = endPath.get(PossibleColors.RED).get(2);
         Coordinate field = fields.get(index);
         pawn.setBounds((int) (field.getX() * scaleX), (int) (field.getY() * scaleY), Pawn.PAWN_WIDTH, Pawn.PAWN_HEIGHT);
         this.add(pawn);
@@ -237,21 +229,21 @@ public class Board extends JPanel {
                 (key, value) -> {
                     switch (value) {
                         case FORWARD_1 ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_1.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_1.png").getImage(), fields.get(key).getX() - 12, fields.get(key).getY() - 15, null);
                         case FORWARD_2 ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_2.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_2.png").getImage(), fields.get(key).getX() - 12, fields.get(key).getY() - 15, null);
                         case FORWARD_3 ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_3.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Forward_3.png").getImage(), fields.get(key).getX() - 12, fields.get(key).getY() - 15, null);
                         case BACKWARD_1 ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_1.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_1.png").getImage(), fields.get(key).getX() - 12, fields.get(key).getY() - 15, null);
                         case BACKWARD_2 ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_2.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_2.png").getImage(), fields.get(key).getX() - 12, fields.get(key).getY() - 15, null);
                         case BACKWARD_3 ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_3.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/Backward_3.png").getImage(), fields.get(key).getX() - 12, fields.get(key).getY() - 15, null);
                         case TELEPORT ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/TeleportField.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/TeleportField.png").getImage(), fields.get(key).getX() - 12, fields.get(key).getY() - 15, null);
                         case BLOCKING ->
-                                g2D.drawImage(new ImageIcon("./assets/Fields/BlockingField.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
+                                g2D.drawImage(new ImageIcon("./assets/Fields/BlockingField.png").getImage(), fields.get(key).getX() - 12, fields.get(key).getY() - 15, null);
                     }
                 }
         );

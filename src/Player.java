@@ -6,9 +6,8 @@ import java.util.concurrent.CountDownLatch;
 
 public class Player {
     private final Color playerColor;
-    private Pawn[] pawns = new Pawn[4];
-    private int firstField;
-    private int lastField;
+    private final Pawn[] pawns = new Pawn[4];
+    private final int firstField;
     private Statuses status;
     public final static int MAX_DICE_RESULT = 6;
     public final static int MAX_MOVE_COUNT = 3;
@@ -16,11 +15,10 @@ public class Player {
     private final static int AROUND_ROUTE_LENGTH = 56;
     private final PossibleColors playerColorName;
 
-    Player(PossibleColors color, int newFirstField, int newLastField) {
+    Player(PossibleColors color, int newFirstField) {
         playerColorName = color;
         playerColor = new Color(color.getColorName());
         firstField = newFirstField;
-        lastField = newLastField;
         status = Statuses.FREE;
         for (int i = 0; i < PAWNS_AMOUNT; i++) {
             switch (color) {
@@ -126,10 +124,9 @@ public class Player {
 
     public void animatedMove(int index, Pawn chosenPawn, Board board) {
         int direction;
-        if ( index > 0 ) {
+        if (index > 0) {
             direction = 1;
-        }
-        else {
+        } else {
             direction = -1;
         }
         for (int i = 0; i < Math.abs(index); i++) {
@@ -141,7 +138,7 @@ public class Player {
             else
                 board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
             try {
-                Thread.sleep(500);
+                Thread.sleep(350);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -156,24 +153,8 @@ public class Player {
         return firstField;
     }
 
-    public int getLastField() {
-        return lastField;
-    }
-
-    public void setFirstField(int coords) {
-        firstField = coords;
-    }
-
-    public void setLastField(int coords) {
-        lastField = coords;
-    }
-
     public Pawn[] getPawns() {
         return pawns;
-    }
-
-    public void setPawns(Pawn[] pawns) {
-        this.pawns = pawns;
     }
 
     public Color getPlayerColor() {

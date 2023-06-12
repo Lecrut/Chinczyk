@@ -13,11 +13,7 @@ public class Game extends JFrame {
     private final JPanel infoPanel = new JPanel();
     private final JLabel textInfo = new JLabel();
     private final JLabel dicePlaceholder = new JLabel();
-//    private final ImageIcon[] diceViews = new ImageIcon[6];
-    public static final JButton diceView = new JButton();
-
     private final ArrayList<PossibleColors> winnersTable = new ArrayList<>();
-
     private final static int AROUND_ROUTE_LENGTH = 56;
     private final static int MAP_WIDTH = 1200;
     private final static int MAP_HEIGHT = 800;
@@ -26,33 +22,33 @@ public class Game extends JFrame {
     public final static int PANEL_DIMENSIONS = 400;
     public final static int DICE_SIZE = 90;
 
-    public Dice kostka;
+    private Dice dice;
 
     public Game(int playersNumber) throws HeadlessException {
         players = new Player[playersNumber];
         board = new Board();
-        kostka = new Dice();
+        dice = new Dice();
 
         if (playersNumber >= 1) {
-            players[0] = new Player(PossibleColors.BLUE, 0, 4 * DISTANCE_BETWEEN_PLAYERS - 1);
+            players[0] = new Player(PossibleColors.BLUE, 0);
             for (Pawn pawn : players[0].getPawns()) {
                 board.setPawnStartBase(pawn, PossibleColors.BLUE);
             }
         }
         if (playersNumber >= 2) {
-            players[1] = new Player(PossibleColors.RED, 2 * DISTANCE_BETWEEN_PLAYERS, (2 * DISTANCE_BETWEEN_PLAYERS) - 1);
+            players[1] = new Player(PossibleColors.RED, 2 * DISTANCE_BETWEEN_PLAYERS);
             for (Pawn pawn : players[1].getPawns()) {
                 board.setPawnStartBase(pawn, PossibleColors.RED);
             }
         }
         if (playersNumber >= 3) {
-            players[2] = new Player(PossibleColors.GREEN, DISTANCE_BETWEEN_PLAYERS, DISTANCE_BETWEEN_PLAYERS - 1);
+            players[2] = new Player(PossibleColors.GREEN, DISTANCE_BETWEEN_PLAYERS);
             for (Pawn pawn : players[2].getPawns()) {
                 board.setPawnStartBase(pawn, PossibleColors.GREEN);
             }
         }
         if (playersNumber == 4) {
-            players[3] = new Player(PossibleColors.YELLOW, 3 * DISTANCE_BETWEEN_PLAYERS, (3 * DISTANCE_BETWEEN_PLAYERS) - 1);
+            players[3] = new Player(PossibleColors.YELLOW, 3 * DISTANCE_BETWEEN_PLAYERS);
             for (Pawn pawn : players[3].getPawns()) {
                 board.setPawnStartBase(pawn, PossibleColors.YELLOW);
             }
@@ -70,11 +66,11 @@ public class Game extends JFrame {
                 boolean nextMove = true;
                 for (int i = 1; nextMove; i++) {
                     final CountDownLatch latch = new CountDownLatch(1);
-                    kostka.addMouseListener(new MouseAdapter() {
+                    dice.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            kostka = (Dice) e.getSource();
-                            kostka.diceThrow();
+                            dice = (Dice) e.getSource();
+                            dice.diceThrow();
                             latch.countDown(); // Zwalnianie CountDownLatch po kliknięciu
                         }
                     });
@@ -83,8 +79,8 @@ public class Game extends JFrame {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    kostka.removeMouseListener(kostka.getMouseListeners()[0]);
-                    nextMove = player.playerMove(board, i, kostka.getDiceResult());
+                    dice.removeMouseListener(dice.getMouseListeners()[0]);
+                    nextMove = player.playerMove(board, i, dice.getDiceResult());
                     checkBoard(player);
                     if (getWinnersTable().size() == 3) {
                         nextMove = false;
@@ -126,7 +122,6 @@ public class Game extends JFrame {
     private void triggerSpecialFields(Pawn pawn, Player player, SpecialFieldTypes fieldType) {
         if (fieldType == null)
             return;
-        System.out.println("\npole specjalne " + fieldType.name() + "\n");
         switch (fieldType) {
             case FORWARD_1 -> player.animatedMove(1, pawn, board);
             case FORWARD_2 -> player.animatedMove(2, pawn, board);
@@ -208,7 +203,7 @@ public class Game extends JFrame {
     }
 
     public void setDiceView(int diceResult) {
-        kostka.setIcon(Dice.diceViews[diceResult-1]);
+        dice.setIcon(Dice.diceViews[diceResult - 1]);
     }
 
 
@@ -241,10 +236,10 @@ public class Game extends JFrame {
         textInfo.setFont(new Font("Arial", Font.BOLD, 40));
         textInfo.setBounds(0, 0, 50, 50);
 
-        kostka.setForeground(Color.white);
-        kostka.setPreferredSize(new Dimension(DICE_SIZE, DICE_SIZE));
-        kostka.setBounds(170, 50, DICE_SIZE, DICE_SIZE);
-        dicePlaceholder.add(kostka);
+        dice.setForeground(Color.white);
+        dice.setPreferredSize(new Dimension(DICE_SIZE, DICE_SIZE));
+        dice.setBounds(170, 50, DICE_SIZE, DICE_SIZE);
+        dicePlaceholder.add(dice);
         setDiceView(1);
 
         dicePlaceholder.setPreferredSize(new Dimension(PANEL_DIMENSIONS, PANEL_DIMENSIONS / 2));

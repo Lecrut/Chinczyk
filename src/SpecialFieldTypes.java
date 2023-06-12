@@ -8,13 +8,13 @@ public enum SpecialFieldTypes {
     TELEPORT(6),
     BLOCKING(7);
 
-    private SpecialFieldTypes(int value) {
+    SpecialFieldTypes(int value) {
     }
 
-    private static final SpecialFieldTypes[] vals = values();
-    public static final int SPECIAL_FIELDS_COUNT = vals.length;
+    private static final SpecialFieldTypes[] values = values();
+    public static final int SPECIAL_FIELDS_COUNT = values.length;
 
     public SpecialFieldTypes next() {
-        return vals[(this.ordinal() + 1) % vals.length];
+        return values[(this.ordinal() + 1) % values.length];
     }
 }

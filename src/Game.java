@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 public class Game extends JFrame {
     private int roundCounter = 1;
@@ -10,8 +13,8 @@ public class Game extends JFrame {
     private final JPanel infoPanel = new JPanel();
     private final JLabel textInfo = new JLabel();
     private final JLabel dicePlaceholder = new JLabel();
-    private final ImageIcon[] diceViews = new ImageIcon[6];
-    private final JButton diceView = new JButton();
+//    private final ImageIcon[] diceViews = new ImageIcon[6];
+    public static final JButton diceView = new JButton();
 
     private final ArrayList<PossibleColors> winnersTable = new ArrayList<>();
 
@@ -21,11 +24,14 @@ public class Game extends JFrame {
     private final static int DISTANCE_BETWEEN_PLAYERS = 14;
     public final static int FINAL_PATH = Pawn.PAWN_ROUTE - AROUND_ROUTE_LENGTH;
     public final static int PANEL_DIMENSIONS = 400;
-    public final static int DICE_SIZE = 80;
+    public final static int DICE_SIZE = 90;
+
+    public Dice kostka;
 
     public Game(int playersNumber) throws HeadlessException {
         players = new Player[playersNumber];
         board = new Board();
+        kostka = new Dice();
 
         if (playersNumber >= 1) {
             players[0] = new Player(PossibleColors.BLUE, 0, 4 * DISTANCE_BETWEEN_PLAYERS - 1);
@@ -63,7 +69,22 @@ public class Game extends JFrame {
                 setInformation();
                 boolean nextMove = true;
                 for (int i = 1; nextMove; i++) {
-                    nextMove = player.playerMove(board, i);
+                    final CountDownLatch latch = new CountDownLatch(1);
+                    kostka.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            kostka = (Dice) e.getSource();
+                            kostka.diceThrow();
+                            latch.countDown(); // Zwalnianie CountDownLatch po kliknięciu
+                        }
+                    });
+                    try {
+                        latch.await(); // Oczekiwanie na kliknięcie
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    kostka.removeMouseListener(kostka.getMouseListeners()[0]);
+                    nextMove = player.playerMove(board, i, kostka.getDiceResult());
                     checkBoard(player);
                     if (getWinnersTable().size() == 3) {
                         nextMove = false;
@@ -186,25 +207,10 @@ public class Game extends JFrame {
 
     }
 
-    public void settingDiceView(int diceResult) {
-        diceView.setIcon(diceViews[diceResult - 1]);
+    public void setDiceView(int diceResult) {
+        kostka.setIcon(Dice.diceViews[diceResult-1]);
     }
 
-    public void setDiceViews() {
-        diceViews[0] = new ImageIcon("./assets/Dice/DiceImage1.png");
-        diceViews[1] = new ImageIcon("./assets/Dice/DiceImage2.png");
-        diceViews[2] = new ImageIcon("./assets/Dice/DiceImage3.png");
-        diceViews[3] = new ImageIcon("./assets/Dice/DiceImage4.png");
-        diceViews[4] = new ImageIcon("./assets/Dice/DiceImage5.png");
-        diceViews[5] = new ImageIcon("./assets/Dice/DiceImage6.png");
-
-        diceView.setForeground(Color.white);
-        diceView.setPreferredSize(new Dimension(DICE_SIZE, DICE_SIZE));
-        diceView.setBounds(170, 50, DICE_SIZE, DICE_SIZE);
-        dicePlaceholder.add(diceView);
-
-        settingDiceView(1); // widok poczatkowy przed pierwszym rzutem
-    }
 
     public void generatePopup() {
         StringBuilder x = new StringBuilder("Koniec gry\n");
@@ -235,6 +241,12 @@ public class Game extends JFrame {
         textInfo.setFont(new Font("Arial", Font.BOLD, 40));
         textInfo.setBounds(0, 0, 50, 50);
 
+        kostka.setForeground(Color.white);
+        kostka.setPreferredSize(new Dimension(DICE_SIZE, DICE_SIZE));
+        kostka.setBounds(170, 50, DICE_SIZE, DICE_SIZE);
+        dicePlaceholder.add(kostka);
+        setDiceView(1);
+
         dicePlaceholder.setPreferredSize(new Dimension(PANEL_DIMENSIONS, PANEL_DIMENSIONS / 2));
         dicePlaceholder.setHorizontalAlignment(JLabel.CENTER);
 
@@ -242,7 +254,7 @@ public class Game extends JFrame {
         infoPanel.add(textInfo, BorderLayout.CENTER);
 
         setInformation();
-        setDiceViews();
+        setDiceView(1);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);

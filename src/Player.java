@@ -32,11 +32,6 @@ public class Player {
         }
     }
 
-    private int diceThrow() {
-        int min = 1;
-        int max = 6;
-        return (int) Math.floor(Math.random() * (max - min + 1) + min);
-    }
 
     private Pawn choosePawn(int diceResult) {
         final CountDownLatch latch = new CountDownLatch(1);
@@ -91,11 +86,8 @@ public class Player {
     }
 
 
-    public boolean playerMove(Board board, int luckCounter) {
+    public boolean playerMove(Board board, int luckCounter, int diceResult) {
         boolean nextTurn = false;
-
-        int diceResult = diceThrow();
-        System.out.printf("%d %s\n", diceResult, this.getPlayerColorName());
 
         if (diceResult == MAX_DICE_RESULT) {
             if (luckCounter != MAX_MOVE_COUNT) {

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 public class Game extends JFrame {
-    private final int roundCounter = 0;
+    private int roundCounter = 1;
     private final Player[] players;
     private Player currentPlayer;
     private final Board board;
@@ -66,7 +66,7 @@ public class Game extends JFrame {
         for (Player player : players) {
             if (player.getStatus() == Statuses.FREE) {
                 currentPlayer = player;
-                infoPanel.setBackground(currentPlayer.getPlayerColor());
+                setInformation();
                 boolean nextMove = true;
                 for (int i = 1; nextMove; i++) {
                     final CountDownLatch latch = new CountDownLatch(1);
@@ -95,6 +95,7 @@ public class Game extends JFrame {
                 }
             }
         }
+        roundCounter++;
     }
 
     public ArrayList<PossibleColors> getWinnersTable() {
@@ -127,13 +128,14 @@ public class Game extends JFrame {
             return;
         System.out.println("\npole specjalne " + fieldType.name() + "\n");
         switch (fieldType) {
-            case FORWARD_1 -> pawn.move(1);
-            case FORWARD_2 -> pawn.move(2);
-            case FORWARD_3 -> pawn.move(3);
-            case BACKWARD_1 -> pawn.move(-1);
-            case BACKWARD_2 -> pawn.move(-2);
-            case BACKWARD_3 -> pawn.move(-3);
+            case FORWARD_1 -> player.animatedMove(1, pawn, board);
+            case FORWARD_2 -> player.animatedMove(2, pawn, board);
+            case FORWARD_3 -> player.animatedMove(3, pawn, board);
+            case BACKWARD_1 -> player.animatedMove(-1, pawn, board);
+            case BACKWARD_2 -> player.animatedMove(-2, pawn, board);
+            case BACKWARD_3 -> player.animatedMove(-3, pawn, board);
             case TELEPORT -> pawn.setPosition(teleportPawn());
+            case BLOCKING -> pawn.setStatusGame(PawnStatuses.IS_BLOCKED);
         }
         if (pawn.getPosition() < AROUND_ROUTE_LENGTH)
             board.setPawn(pawn, (pawn.getPosition() + player.getFirstField()) % AROUND_ROUTE_LENGTH);
@@ -148,9 +150,9 @@ public class Game extends JFrame {
             return;
         }
         for (Pawn pawn2 : player2.getPawns()) {
-            if (pawn2.getStatus() == PawnStatuses.IN_GAME) {
+            if (pawn2.getStatus() == PawnStatuses.IN_GAME || pawn2.getStatus() == PawnStatuses.IS_BLOCKED) {
                 for (Pawn pawn1 : player1.getPawns()) {
-                    if (pawn1.getStatus() == PawnStatuses.IN_GAME) {
+                    if (pawn1.getStatus() == PawnStatuses.IN_GAME || pawn1.getStatus() == PawnStatuses.IS_BLOCKED) {
                         if ((pawn1.getPosition() + player1.getFirstField()) % AROUND_ROUTE_LENGTH == (pawn2.getPosition() + player2.getFirstField()) % AROUND_ROUTE_LENGTH) {
                             pawn2.setStatusGame(PawnStatuses.IN_BASE);
                             pawn2.setPosition(0);
@@ -190,23 +192,15 @@ public class Game extends JFrame {
         checkSpecialFields(player);
     }
 
-    public boolean checkWinners() {
-        for (Player player : players) {
-            if (player.getStatus() == Statuses.WINNER) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void setInformation() {
-        if (checkWinners()) {
-            String x = "<html><pre>ROUND: " + roundCounter + "\nTURN: " + currentPlayer.getPlayerColorName() + "\n<ol>";
+        infoPanel.setBackground(currentPlayer.getPlayerColor());
+        if (getWinnersTable().size() > 0) {
+            StringBuilder x = new StringBuilder("<html><pre>ROUND: " + roundCounter + "\nTURN: " + currentPlayer.getPlayerColorName() + "\n<ol>");
             for (PossibleColors color : winnersTable) {
-                x += "<li>" + color + "</li>";
+                x.append("<li>").append(color).append("</li>");
             }
-            x += "</ol></pre><html>";
-            textInfo.setText(x);
+            x.append("</ol></pre><html>");
+            textInfo.setText(x.toString());
         } else {
             textInfo.setText("<html><pre>ROUND: " + roundCounter + "\nTURN: " + currentPlayer.getPlayerColorName() + "</pre><html>");
         }
@@ -219,18 +213,18 @@ public class Game extends JFrame {
 
 
     public void generatePopup() {
-        String x = "Koniec gry\n";
+        StringBuilder x = new StringBuilder("Koniec gry\n");
         int i = 1;
         for (PossibleColors colors : winnersTable) {
-            x += String.valueOf(i);
-            x += ". ";
-            x += colors;
-            x += "\n";
+            x.append(i);
+            x.append(". ");
+            x.append(colors);
+            x.append("\n");
             i++;
         }
         Frame frame = new Frame();
         int input = JOptionPane.showConfirmDialog(frame,
-                x, "Koniec gry", JOptionPane.DEFAULT_OPTION);
+                x.toString(), "Koniec gry", JOptionPane.DEFAULT_OPTION);
         if (input == 0) {
             System.exit(0);
         }

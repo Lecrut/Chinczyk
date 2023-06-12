@@ -250,6 +250,8 @@ public class Board extends JPanel {
                                 g2D.drawImage(new ImageIcon("./assets/Fields/Backward_3.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
                         case TELEPORT ->
                                 g2D.drawImage(new ImageIcon("./assets/Fields/TeleportField.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
+                        case BLOCKING ->
+                                g2D.drawImage(new ImageIcon("./assets/Fields/BlockingField.png").getImage(), fields.get(key).getX()-12, fields.get(key).getY()-15, null);
                     }
                 }
         );

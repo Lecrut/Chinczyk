@@ -32,11 +32,6 @@ public class Player {
         }
     }
 
-//    private int diceThrow() {
-//        int min = 1;
-//        int max = 6;
-//        return (int) Math.floor(Math.random() * (max - min + 1) + min);
-//    }
 
     private Pawn choosePawn(int diceResult) {
         final CountDownLatch latch = new CountDownLatch(1);
@@ -51,6 +46,7 @@ public class Player {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         clickedPawn[0] = (Pawn) e.getSource();
+
                         latch.countDown(); // Zwalnianie CountDownLatch po kliknięciu
                     }
                 });
@@ -83,20 +79,12 @@ public class Player {
 
 
     private boolean checkPawn(Pawn pawn, int diceResult) {
-        if (diceResult == MAX_DICE_RESULT && pawn.getStatus() == PawnStatuses.IN_BASE) {
+        if (diceResult == MAX_DICE_RESULT && (pawn.getStatus() == PawnStatuses.IN_BASE || pawn.getStatus() == PawnStatuses.IS_BLOCKED)) {
             return true;
         }
         return pawn.validateMove(diceResult) && (pawn.getStatus() == PawnStatuses.IN_GAME || pawn.getStatus() == PawnStatuses.IN_END_PATH);
     }
 
-    private boolean leaveHomeCheck() {
-        for (int i = 0; i < 4; i++) {
-            if (pawns[i].getStatus() == PawnStatuses.IN_BASE) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public boolean playerMove(Board board, int luckCounter, int diceResult) {
         boolean nextTurn = false;
@@ -107,49 +95,57 @@ public class Player {
             }
             Pawn chosenPawn = choosePawn(diceResult);
             if (chosenPawn == null) {
-                Dice.setDrawFlag(true);
                 return false;
             }
             if (chosenPawn.getStatus() == PawnStatuses.IN_BASE) {
-                Dice.setDrawFlag(false);
-                System.out.println("check");
                 chosenPawn.setStatusGame(PawnStatuses.IN_GAME);
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < PAWNS_AMOUNT; i++) {
                     if (chosenPawn.equals(pawns[i])) {
                         board.getStartBase().get(playerColorName).get(i).setOccupied(false);
                     }
                 }
                 board.setPawn(chosenPawn, firstField);
+            } else if (chosenPawn.getStatus() == PawnStatuses.IS_BLOCKED) {
+                chosenPawn.setStatusGame(PawnStatuses.IN_GAME);
+                while (board.getSpecialField((chosenPawn.getPosition() + getFirstField()) % AROUND_ROUTE_LENGTH) != null) {
+                    animatedMove(1, chosenPawn, board);
+                }
             } else {
-                Dice.setDrawFlag(false);
-                chosenPawn.move(diceResult);
-                if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH) {
-                    board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
-                } else if (chosenPawn.getPosition() == Pawn.PAWN_ROUTE){
-                    board.setPawnEndBase(chosenPawn, getPlayerColorName());
-                }
-                else{
-                    board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
-                }
+                animatedMove(diceResult, chosenPawn, board);
             }
-            Dice.setDrawFlag(true);
             return nextTurn;
         } else {
             Pawn chosenPawn = choosePawn(diceResult);
             if (chosenPawn == null) {
-                Dice.setDrawFlag(true);
                 return false;
             }
-            chosenPawn.move(diceResult);
+            animatedMove(diceResult, chosenPawn, board);
+        }
+        return false;
+    }
+
+    public void animatedMove(int index, Pawn chosenPawn, Board board) {
+        int direction;
+        if ( index > 0 ) {
+            direction = 1;
+        }
+        else {
+            direction = -1;
+        }
+        for (int i = 0; i < Math.abs(index); i++) {
+            chosenPawn.move(direction);
             if (chosenPawn.getPosition() < AROUND_ROUTE_LENGTH)
                 board.setPawn(chosenPawn, (chosenPawn.getPosition() + firstField) % AROUND_ROUTE_LENGTH);
             else if (chosenPawn.getPosition() == Pawn.PAWN_ROUTE)
                 board.setPawnEndBase(chosenPawn, getPlayerColorName());
             else
                 board.setPawnEndPath(chosenPawn, getPlayerColorName(), chosenPawn.getPosition() - AROUND_ROUTE_LENGTH);
-            Dice.setDrawFlag(true);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
-        return false;
     }
 
     public void setStatusWinner() {

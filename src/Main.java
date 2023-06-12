@@ -1,7 +1,9 @@
 public class Main {
+    private static final int numberOfPlayers = 4;
+
     public static void main(String[] args) {
-        Game game = new Game(4);
-        while (game.getWinnersTable().size() < 3) { //TODO: do zmiany warunek
+        Game game = new Game(numberOfPlayers);
+        while (game.getWinnersTable().size() < numberOfPlayers - 1) {
             game.round();
         }
         game.generatePopup();

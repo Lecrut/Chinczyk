@@ -15,6 +15,8 @@ public class Board extends JPanel {
     private final static int PANEL_HEIGHT = 765;
     public final static int BEGIN_COORDINATE = 0;
     private static final int MAP_OFFSET = 50;
+    private int beginX = 431;
+    private int beginY = 19;
     private final ArrayList<Coordinate> fields = new ArrayList<>();
     private final HashMap<PossibleColors, ArrayList<Coordinate>> startBase = new HashMap<>();
     private final HashMap<PossibleColors, ArrayList<Coordinate>> endBase = new HashMap<>();
@@ -55,8 +57,7 @@ public class Board extends JPanel {
     }
 
     private void generateArrayList() {
-        int beginX = 431;
-        int beginY = 19;
+
         fields.add(new Coordinate(beginX, beginY, false));
         beginX += MAP_OFFSET;
         for (int i = 0; i < 6; i++) {

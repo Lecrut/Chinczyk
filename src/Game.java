@@ -161,6 +161,19 @@ public class Game extends JFrame {
         }
     }
 
+    public static int startMenu() {
+        Object[] options = {"2 graczy", "3 graczy", "4 graczy"};
+        int check = JOptionPane.showOptionDialog(null, "Wybierz ilość graczy: ", "你好",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        if (check == 0) {
+            return 2;
+        } else if (check == 1) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
+
     private void checkWinningPawns() {
         for (Player player : players) {
             if (checkWinningPlayer(player)) {

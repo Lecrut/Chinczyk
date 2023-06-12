@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 public class Game extends JFrame {
     private final int roundCounter = 0;
@@ -21,12 +24,14 @@ public class Game extends JFrame {
     private final static int DISTANCE_BETWEEN_PLAYERS = 14;
     public final static int FINAL_PATH = Pawn.PAWN_ROUTE - AROUND_ROUTE_LENGTH;
     public final static int PANEL_DIMENSIONS = 400;
-    public final static int DICE_SIZE = 80;
+    public final static int DICE_SIZE = 90;
+
+    public Dice kostka;
 
     public Game(int playersNumber) throws HeadlessException {
         players = new Player[playersNumber];
         board = new Board();
-        new Dice();
+        kostka = new Dice();
 
         if (playersNumber >= 1) {
             players[0] = new Player(PossibleColors.BLUE, 0, 4 * DISTANCE_BETWEEN_PLAYERS - 1);
@@ -64,7 +69,22 @@ public class Game extends JFrame {
                 infoPanel.setBackground(currentPlayer.getPlayerColor());
                 boolean nextMove = true;
                 for (int i = 1; nextMove; i++) {
-                    nextMove = player.playerMove(board, i);
+                    final CountDownLatch latch = new CountDownLatch(1);
+                    kostka.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            kostka = (Dice) e.getSource();
+                            kostka.diceThrow();
+                            latch.countDown(); // Zwalnianie CountDownLatch po kliknięciu
+                        }
+                    });
+                    try {
+                        latch.await(); // Oczekiwanie na kliknięcie
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    kostka.removeMouseListener(kostka.getMouseListeners()[0]);
+                    nextMove = player.playerMove(board, i, kostka.getDiceResult());
                     checkBoard(player);
                     if (getWinnersTable().size() == 3) {
                         nextMove = false;
@@ -194,7 +214,7 @@ public class Game extends JFrame {
     }
 
     public void setDiceView(int diceResult) {
-        diceView.setIcon(Dice.diceViews[diceResult-1]);
+        kostka.setIcon(Dice.diceViews[diceResult-1]);
     }
 
 
@@ -227,10 +247,10 @@ public class Game extends JFrame {
         textInfo.setFont(new Font("Arial", Font.BOLD, 40));
         textInfo.setBounds(0, 0, 50, 50);
 
-        diceView.setForeground(Color.white);
-        diceView.setPreferredSize(new Dimension(DICE_SIZE, DICE_SIZE));
-        diceView.setBounds(170, 50, DICE_SIZE, DICE_SIZE);
-        dicePlaceholder.add(diceView);
+        kostka.setForeground(Color.white);
+        kostka.setPreferredSize(new Dimension(DICE_SIZE, DICE_SIZE));
+        kostka.setBounds(170, 50, DICE_SIZE, DICE_SIZE);
+        dicePlaceholder.add(kostka);
         setDiceView(1);
 
         dicePlaceholder.setPreferredSize(new Dimension(PANEL_DIMENSIONS, PANEL_DIMENSIONS / 2));

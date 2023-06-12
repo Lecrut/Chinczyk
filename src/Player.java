@@ -51,7 +51,6 @@ public class Player {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         clickedPawn[0] = (Pawn) e.getSource();
-
                         latch.countDown(); // Zwalnianie CountDownLatch po kliknięciu
                     }
                 });
@@ -99,12 +98,8 @@ public class Player {
         return false;
     }
 
-    public boolean playerMove(Board board, int luckCounter) {
+    public boolean playerMove(Board board, int luckCounter, int diceResult) {
         boolean nextTurn = false;
-        int diceResult = Dice.getDiceResult();
-//        Dice.setDrawFlag(false);
-
-//        System.out.printf("%d %s\n", diceResult, this.getPlayerColorName());
 
         if (diceResult == MAX_DICE_RESULT) {
             if (luckCounter != MAX_MOVE_COUNT) {

@@ -3,22 +3,27 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Dice implements ActionListener {
+public class Dice extends JLabel{
 
     public static final ImageIcon[] diceViews = new ImageIcon[6];
 
-    private static int diceResult;
+    private int diceResult;
 
     private static boolean drawFlag;
 
+    private ImageIcon currentImage = new ImageIcon();
+
     Dice() {
         configureDiceViews();
-        Game.diceView.addActionListener(this);
         setDrawFlag(true);
         System.out.println(drawFlag);
     }
 
-    public static int getDiceResult() {
+    public void setDiceResult(int diceResult) {
+        this.diceResult = diceResult;
+    }
+
+    public int getDiceResult() {
         return diceResult;
     }
 
@@ -36,10 +41,14 @@ public class Dice implements ActionListener {
         diceViews[5] = new ImageIcon("./assets/Dice/DiceImage6.png");
     }
 
-    public static int diceThrow() {
+    public void diceThrow() {
         int min = 1;
         int max = 6;
-        return (int) Math.floor(Math.random() * (max - min + 1) + min);
+        diceResult = (int) Math.floor(Math.random() * (max - min + 1) + min);
+        currentImage = diceViews[diceResult - 1];
+
+        repaint();
+//        return (int) Math.floor(Math.random() * (max - min + 1) + min);
     }
 
     public void setDiceView(int diceResult) {
@@ -47,13 +56,8 @@ public class Dice implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == Game.diceView) {
-            if(drawFlag){
-                diceResult = diceThrow();
-                setDiceView(diceResult);
-                Dice.setDrawFlag(false);
-            }
-        }
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(currentImage.getImage(), Board.BEGIN_COORDINATE, Board.BEGIN_COORDINATE, getWidth(), getHeight(), null);
     }
 }

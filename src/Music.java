@@ -1,8 +1,6 @@
-import java.awt.*;
 import java.io.File;
 import javax.sound.sampled.*;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 
 public class Music extends JFrame {
@@ -30,33 +28,6 @@ public class Music extends JFrame {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    public static void stopMusic() {
-        if (clip != null && clip.isRunning()) {
-            clip.stop();
-            isPlaying = false;
-        }
-    }
-
-    public static void decreaseVolume() {
-        if (volumeControl != null) {
-            float currentVolume = volumeControl.getValue();
-            float decreaseAmount = -10f;
-
-            float newVolume = currentVolume + decreaseAmount;
-            volumeControl.setValue(newVolume);
-        }
-    }
-
-    public static void increaseVolume() {
-        if (volumeControl != null) {
-            float currentVolume = volumeControl.getValue();
-            float increaseAmount = 10f;
-
-            float newVolume = currentVolume + increaseAmount;
-            volumeControl.setValue(newVolume);
         }
     }
 }

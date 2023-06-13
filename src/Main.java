@@ -3,6 +3,8 @@ public class Main {
     public static void main(String[] args) {
         PLAYERS_NUMBER = Game.startMenu();
         Game game = new Game(PLAYERS_NUMBER);
+
+        Music.playMusic();
         while (game.getWinnersTable().size() < PLAYERS_NUMBER - 1) {
             game.round();
         }

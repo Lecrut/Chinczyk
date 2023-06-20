@@ -21,10 +21,12 @@ public class Game extends JFrame {
     public final static int FINAL_PATH = Pawn.PAWN_ROUTE - AROUND_ROUTE_LENGTH;
     public final static int PANEL_DIMENSIONS = 400;
     public final static int DICE_SIZE = 90;
+    private static int PLAYER_NUMBER;
 
     private Dice dice;
 
     public Game(int playersNumber) throws HeadlessException {
+        PLAYER_NUMBER = playersNumber;
         players = new Player[playersNumber];
         board = new Board();
         dice = new Dice();
@@ -84,7 +86,7 @@ public class Game extends JFrame {
                     setInformation(false);
                     nextMove = player.playerMove(board, i, dice.getDiceResult());
                     checkBoard(player);
-                    if (getWinnersTable().size() == 3) {
+                    if (getWinnersTable().size() == PLAYER_NUMBER - 1) {
                         nextMove = false;
                     }
                     if (player.getStatus() == Statuses.WINNER) {
